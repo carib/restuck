@@ -1,0 +1,26 @@
+html, body, canvas {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: #161c20;
+}
+
+canvas {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#root {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  height: 300px;
+  width: 96%;
+  background: #fff;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}

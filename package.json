@@ -1,0 +1,34 @@
+{
+  "name": "webpack-gulp4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "gulp --require babel-register --gulpfile tasks",
+    "build": "NODE_ENV=production gulp build --require babel-register --gulpfile tasks"
+  },
+  "babel": {
+    "presets": [
+      "env"
+    ],
+    "babelrc": false
+  },
+  "keywords": [],
+  "author": "Carib",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "browser-sync": "^2.24.1",
+    "del": "^3.0.0",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-changed": "^3.2.0",
+    "gulp-sass": "^4.0.1",
+    "gulp-v4": "^4.0.0-alpha.5",
+    "webpack": "^4.6.0",
+    "webpack-dev-middleware": "^3.1.3"
+  },
+  "dependencies": {}
+}
