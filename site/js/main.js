@@ -1,14 +1,7 @@
-import { Game, Engine, Display, Controller } from './components/index'
-
+import Game from './game'
 
 window.onload = () => {
-  console.log('*** DOM CONTENT LOADED ***');
-  const canvas      = document.getElementById('canvas')
-  const timeStep    = 1000/30
-  const engine      = new Engine(timeStep)
-  const display     = new Display(canvas)
-  const controller  = new Controller()
-  const game        = new Game(engine, display, controller)
-  
+  const root  = document.getElementById('root');
+  const game  = new Game(root)
   game.init()
 }

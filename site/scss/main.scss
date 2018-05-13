@@ -17,10 +17,34 @@ canvas {
 #root {
   position: fixed;
   top: 10px;
-  left: 10px;
-  height: 300px;
-  width: 96%;
+  left: 0;
+  height: 320px;
+  width: 480px;
   background: #fff;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+#grid {
+  position: fixed;
+  top: 10px;
+  left: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  height: 320px;
+  width: 480px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.cell {
+  width: 32px;
+  height: 32px;
+  border-right: 1px solid #dadada;
+  border-bottom: 1px solid #dadada;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }

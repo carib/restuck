@@ -1,15 +1,16 @@
 export default class Engine {
-  constructor(timeStep) {
+  constructor(timeStep, render, update) {
     this.elapsedTime  = 0
     this.animFrameReq = undefined
     this.time         = undefined
     this.step         = timeStep
-    this.updated      = false
+    this.render       = render
+    this.update       = update
 
     this.run       = this.run.bind(this)
-    this.stop      = this.stop.bind(this)
-    this.start     = this.start.bind(this)
-    this.handleRun = this.handleRun.bind(this)
+    this.runEngine = this.runEngine.bind(this)
+    this.play      = this.play.bind(this)
+    this.pause     = this.pause.bind(this)
   }
 
   run(timeStamp) {
@@ -20,25 +21,31 @@ export default class Engine {
       this.elapsedTime = this.step
     }
 
+    while (this.elapsedTime >= this.step) {
+      this.elapsedTime -= this.step
+      this.update(timeStamp)
+      this.updated = true
+    }
+
     if (this.updated) {
       this.updated = false
       this.render(timeStamp)
     }
 
-    this.animFrameReq = window.requestAnimationFrame(this.handleRun)
+    this.animFrameReq = window.requestAnimationFrame(this.runEngine)
   }
 
-  handleRun(step) {
+  runEngine(step) {
     this.run(step)
   }
 
-  start() {
+  play() {
     this.elapsedTime = this.step
     this.time = window.performance.now()
-    this.animFrameReq = window.requestAnimationFrame(this.handleRun)
+    this.animFrameReq = window.requestAnimationFrame(this.runEngine)
   }
 
-  stop() {
+  pause() {
     window.cancelAnimationFrame(this.animFrameReq)
   }
 }
