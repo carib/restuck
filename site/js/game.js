@@ -22,6 +22,12 @@ export default class Game {
       this.entity,
       this.player,
     ])
+    //////// FOR TESTING
+    window.stage = this.stage
+    window.entity = this.entity
+    window.player = this.player
+
+
     document.addEventListener('keyup', this.player.handleKeyPress)
     document.addEventListener('keydown', this.player.handleKeyPress)
     this.stage.buildCellGrid()

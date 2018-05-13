@@ -2,6 +2,8 @@ export default class Entity {
   constructor(x, y, width, height) {
     this.x        = x
     this.y        = y
+    this.x2       = x + width
+    this.y2       = y + height
     this.lastX    = x
     this.lastY    = y
     this.veloX    = 0
@@ -13,6 +15,7 @@ export default class Entity {
     this.class    = 'entity'
     this.id       = 'entity'
     this.cells    = new Set()
+    this.occupiedCells = new Set()
 
     this.watchKeys()
     this.update = this.update.bind(this)

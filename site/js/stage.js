@@ -18,32 +18,24 @@ export default class Stage {
 
   }
 
-  checkCollision() {
-    const colliders = {}
-    this.possibleCollisions.forEach(cell => {
-      if (this.cells[cell].has('wall') && this.cells[cell].size < 3) {
-        return
-      }
-
-    })
-  }
-
   updateCells() {
     let entityCells
     for (let ent of this.entities) {
       if (ent !== this && ent.id !== 'wall') {
         entityCells = this.getEntityCells(ent)
         ent.cells.forEach(cell => {
-          this.cells[cell].delete(ent.id)
+          this.cells[cell].delete(ent)
         })
+        ent.cells.clear()
         Object.values(entityCells).forEach(cell => {
-          this.cells[cell].add(ent.id)
+          this.cells[cell].add(ent)
           if (this.cells[cell].size > 1) {
             this.possibleCollisions.add(cell)
           }
         })
         Object.values(entityCells).forEach(cell => {
           ent.cells.add(cell)
+          ent.occupiedCells.add(this.cells[cell])
         })
       }
     }
