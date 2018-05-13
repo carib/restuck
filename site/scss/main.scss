@@ -40,9 +40,14 @@ canvas {
           box-sizing: border-box;
 }
 
+#protoCell {
+  width: 10px;
+  height: 10px;
+}
+
 .cell {
-  width: 32px;
-  height: 32px;
+  width: 10px;
+  height: 10px;
   border-right: 1px solid #dadada;
   border-bottom: 1px solid #dadada;
   -webkit-box-sizing: border-box;

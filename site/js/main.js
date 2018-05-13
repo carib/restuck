@@ -1,4 +1,4 @@
-import Game from './game'
+import { Game } from './components'
 
 window.onload = () => {
   const root  = document.getElementById('root');

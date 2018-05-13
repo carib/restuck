@@ -1,7 +1,9 @@
+import { Entity } from './index'
+
 export default class Stage {
   constructor(root) {
     this.root = root
-    this.cellSize = 32
+    this.cellSize = document.getElementById('protoCell').clientWidth
     this.entities = new Set()
     this.possibleCollisions = new Set()
 
@@ -18,9 +20,30 @@ export default class Stage {
 
   }
 
+  buildStageBorder() {
+    let split
+    let row
+    let col
+    let wall
+    Object.keys(this.cells).forEach(id => {
+      split = id.match(/^(\d{0,3}),(\d{0,3}$)/)
+      row = parseInt(split[1])
+      col = parseInt(split[2])
+      if (row === 0 || col === 0 ||
+          row === this.numRows * this.cellSize ||
+          col === this.numCols * this.cellSize) {
+          
+        wall = new Entity(row, col, this.cellSize, this.cellSize)
+        wall.id = 'wall'
+        this.scene.add(wall)
+        this.cells[id].add(wall)
+      }
+    })
+  }
+
   updateCells() {
     let entityCells
-    for (let ent of this.entities) {
+    this.entities.forEach(ent => {
       if (ent !== this && ent.id !== 'wall') {
         entityCells = this.getEntityCells(ent)
         ent.cells.forEach(cell => {
@@ -29,16 +52,15 @@ export default class Stage {
         ent.cells.clear()
         Object.values(entityCells).forEach(cell => {
           this.cells[cell].add(ent)
-          if (this.cells[cell].size > 1) {
-            this.possibleCollisions.add(cell)
-          }
         })
         Object.values(entityCells).forEach(cell => {
           ent.cells.add(cell)
-          ent.occupiedCells.add(this.cells[cell])
+          if (this.cells[cell].size > 1) {
+            ent.occupiedCells.add(this.cells[cell])
+          }
         })
       }
-    }
+    }, this)
   }
 
   getEntityCells(entity) {
@@ -60,14 +82,14 @@ export default class Stage {
   }
 
   buildCellGrid() {
-    const rows = this.root.clientHeight / this.cellSize
-    const cols = this.root.clientWidth / this.cellSize
-    let numCells = rows * cols;
+    this.numRows = this.root.clientHeight / this.cellSize
+    this.numCols = this.root.clientWidth / this.cellSize
+    this.numCells = this.numRows * this.numCols;
     const cells = {};
 
-    for (let i = 0; i < numCells; i++) {
-      let col = (i % 1000 % cols) * this.cellSize;
-      let row = Math.floor(i/cols) * this.cellSize;
+    for (let i = 0; i < this.numCells; i++) {
+      let col = (i % 10000 % this.numCols) * this.cellSize;
+      let row = Math.floor(i / this.numCols) * this.cellSize;
       let coords = `${row},${col}`
       cells[coords] = new Set();
     }

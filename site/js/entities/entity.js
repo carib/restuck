@@ -6,9 +6,6 @@ export default class Entity {
     this.y2       = y + height
     this.lastX    = x
     this.lastY    = y
-    this.veloX    = 0
-    this.veloY    = 0
-    this.friction = 0.9
     this.width    = width
     this.height   = height
     this.color    = '#000'
@@ -17,12 +14,10 @@ export default class Entity {
     this.cells    = new Set()
     this.occupiedCells = new Set()
 
-    this.watchKeys()
+
     this.update = this.update.bind(this)
     this.render = this.render.bind(this)
   }
-
-  handleKeyPress(e) {}
 
   positionEntity() {}
 
@@ -33,10 +28,5 @@ export default class Entity {
     let { ctx } = this.scene
     ctx.fillStyle = this.color
     ctx.fillRect(x, y, width, height)
-  }
-
-  watchKeys() {
-    document.addEventListener('keyup', this.handleKeyPress)
-    document.addEventListener('keydown', this.handleKeyPress)
   }
 }
