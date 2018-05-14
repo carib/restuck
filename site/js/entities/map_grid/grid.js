@@ -107,8 +107,14 @@ export default class Grid {
   }
 
   getCellAt(y, x) {
-    const cellY = (y <= 0) ? 0 : Math.floor(y - (y % this.cellSize))
-    const cellX = (x <= 0) ? 0 : Math.floor(x - (x % this.cellSize))
+    if (y < 0 ||
+        x < 0 ||
+        y > this.rows * this.cellSize ||
+        x > this.cols * this.cellSize) {
+      return
+    }
+    const cellY = Math.floor(y - (y % this.cellSize))
+    const cellX = Math.floor(x - (x % this.cellSize))
     const cell  = `${cellY},${cellX}`
     if (this.get(cell)) {
       return cell
@@ -125,7 +131,6 @@ export default class Grid {
     }
     if (links.north) {
       cell.n = links.north
-
     }
     if (links.east) {
       cell.e = links.east
@@ -140,11 +145,19 @@ export default class Grid {
     })
   }
 
+  linkGridCells() {
+    this.cells.forEach(cell => this.setLinks(cell))
+  }
+
   getLinks(...arg) {
     const delta = this.cellSize
     let intYX
     let y
     let x
+    let lastY
+    let lastX
+    let nextY
+    let nextX
     arg = Array.from(arg)
     if (typeof arg[0] === 'number') {
       y = arg[0]
@@ -162,11 +175,15 @@ export default class Grid {
       y = arg[0].y
       x = arg[0].x
     }
+    lastY = y - delta
+    lastX = x - delta
+    nextY = y + delta
+    nextX = x + delta
     return {
-      west:  this.getCellAt(y, x - delta),
-      north: this.getCellAt(y - delta, x),
-      east:  this.getCellAt(y, x + delta),
-      south: this.getCellAt(y + delta, x),
+      west:  this.getCellAt(y, lastX),
+      north: this.getCellAt(lastY, x),
+      east:  this.getCellAt(y, nextX),
+      south: this.getCellAt(nextY, x),
     }
   }
 }

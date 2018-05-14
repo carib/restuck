@@ -55,6 +55,7 @@ export default class Stage {
 
   generateTerrain() {
     this.buildCellGrid()
+    this.grid.linkGridCells()
     this.buildStageBorder()
     this.gridOverlay()
     const numVoids = 20
