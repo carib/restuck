@@ -13,7 +13,6 @@ export default class Canvas {
   }
 
   resize() {
-    // debugger
     this.canvas.width  = this.root.clientWidth
     this.canvas.height = this.root.clientHeight
   }

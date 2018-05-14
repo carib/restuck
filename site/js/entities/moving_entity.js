@@ -101,8 +101,9 @@ export default class MovingEntity extends Entity {
     const { x, y, x2, y2 } = this
     let collision = false
     if (this.occupiedCells.size > 0) {
+      // debugger
       this.occupiedCells.forEach(cell => {
-        cell.forEach(entity => {
+        cell.each(entity => {
           if (entity !== this) {
             if (x2 < entity.x || y2 < entity.y ||
                 x > entity.x2 || y  > entity.y2) {

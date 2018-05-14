@@ -1,5 +1,3 @@
-import Cell from './cell'
-
 export default class Grid {
   constructor(numRows, numCols) {
     this.rows     = numRows
@@ -10,8 +8,19 @@ export default class Grid {
     this.cells    = new Map()
   }
 
+  each(callback) {
+    this.cells.forEach(cell => callback)
+  }
+
+  has(cell) {
+    if (typeof cell === 'string') {
+      return this.cells.has(cell)
+    }
+    return this.cells.has(cell.coords)
+  }
+
   add(cell) {
-    if (typeof cell === 'string' && !this.cells.has(cell)) {
+    if (typeof cell === 'string' && !this.has(cell)) {
       this.cells.set(cell.coords, cell)
       return
     }
@@ -41,11 +50,10 @@ export default class Grid {
   }
 
   get(cell) {
-    if (typeof cell === 'string' && this.cells.has(cell)) {
-      this.cells.get(cell)
-      return
+    if (typeof cell === 'string') {
+      return this.cells.get(cell)
     }
-    this.cells.get(cell.coords)
+    return this.cells.get(cell.coords)
   }
 
   isFirstCell(cell) {
@@ -76,7 +84,6 @@ export default class Grid {
     return false
   }
 
-
   parseYX(coordString) {
     let split
     let row
@@ -88,21 +95,11 @@ export default class Grid {
   }
 
   getCellAt(y, x) {
-    const cellX = Math.floor(x - (x % this.cellSize))
-    const cellY = Math.floor(y - (y % this.cellSize))
+    const cellY = (y <= 0) ? 0 : Math.floor(y - (y % this.cellSize))
+    const cellX = (x <= 0) ? 0 : Math.floor(x - (x % this.cellSize))
     const cell  = `${cellY},${cellX}`
-    if (this.cells[cell]) {
+    if (this.get(cell)) {
       return cell
-    }
-  }
-
-  getEntityCells(entity) {
-    const { x, y, x2, y2 } = entity
-    return {
-      topLeft:  this.getCellAt(x, y),
-      topRight: this.getCellAt(x2, y),
-      btmLeft:  this.getCellAt(x, y2),
-      btmRight: this.getCellAt(x2, y2)
     }
   }
 

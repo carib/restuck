@@ -46,7 +46,7 @@ export default class Game {
   }
 
   createPlayer() {
-    const cell     = this.stage.parseYX(this.stage.getRandomCell())
+    const cell     = this.stage.cells.parseYX(this.stage.getRandomCell())
     this.player    = new Player(cell.x, cell.y, 8, 8)
     this.player.id = this.logEntity(this.player.logType)
     document.addEventListener('keyup', this.player.handleKeyPress)
@@ -62,7 +62,7 @@ export default class Game {
     let cell
     let enemy
     for (let i = 0; i < numEnemies; i++) {
-      cell = this.stage.parseYX(this.stage.getRandomCell())
+      cell  = this.stage.cells.parseYX(this.stage.getRandomCell())
       enemy = new Enemy(cell.x, cell.y, 8, 8)
       enemy.id = this.logEntity(enemy.logType)
       enemies.push(enemy)

@@ -17,12 +17,17 @@ export default class Cell {
     this.n       = null
     this.e       = null
     this.s       = null
-    // Global grid-cell size
-    this.size = document.getElementById('protoCell').clientWidth
+
+    this.size   = this.size.bind(this)
+    this.has    = this.has.bind(this)
+    this.each   = this.each.bind(this)
+    this.add    = this.add.bind(this)
+    this.remove = this.remove.bind(this)
+    this.clear  = this.clear.bind(this)
   }
 
   size() {
-    return this.cell.size()
+    return this.cell.size
   }
 
   has(value, isId) {
@@ -43,7 +48,7 @@ export default class Cell {
   }
 
   remove(entity) {
-    this.cell.remove(entity)
+    this.cell.delete(entity)
   }
 
   clear() {
