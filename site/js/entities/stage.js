@@ -6,14 +6,13 @@ export default class Stage {
     this.root     = root
     this.cellSize = document.getElementById('protoCell').clientWidth
     this.entities = new Set()
-    this.possibleCollisions = new Set()
 
-    this.render          = this.render.bind(this)
-    this.update          = this.update.bind(this)
-    this.updateCells     = this.updateCells.bind(this)
-    this.getRandomCell   = this.getRandomCell.bind(this)
-    this.generateTerrain = this.generateTerrain.bind(this)
-    this.buildStageBorder   = this.buildStageBorder.bind(this)
+    this.render           = this.render.bind(this)
+    this.update           = this.update.bind(this)
+    this.updateCells      = this.updateCells.bind(this)
+    this.getRandomCell    = this.getRandomCell.bind(this)
+    this.generateTerrain  = this.generateTerrain.bind(this)
+    this.buildStageBorder = this.buildStageBorder.bind(this)
   }
 
   update() {

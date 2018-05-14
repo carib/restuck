@@ -4,6 +4,8 @@ import { Player, Enemy } from '../entities/characters'
 
 import Cell from '../entities/map_grid/cell'
 import Grid from '../entities/map_grid/grid'
+import Pathfinder from '../entities/map_grid/pathfinder'
+import BinaryHeap from '../entities/map_grid/binary_heap'
 
 export default class Game {
   constructor(root) {
@@ -26,12 +28,13 @@ export default class Game {
     window.scene  = this.scene
     window.player = this.player
     window.gLog   = this.gameLog
-    window.pause  = this.engine.pause()
-    window.play   = this.engine.play()
 
-    window.cell = new Cell('0,0')
-    window.cell2 = new Cell('310,470')
-    window.grid = new Grid(this.stage.numRows, this.stage.numCols)
+
+    const start = this.enemy.coords
+    const goal  = this.player.coords
+    const grid  = this.stage.grid
+    window.pf   = new Pathfinder(grid, start, goal)
+    window.heap = new BinaryHeap(function (x) { return x })
     /////////////////////////////
     this.engine.play()
   }
@@ -68,6 +71,10 @@ export default class Game {
       cell  = this.stage.grid.parseYX(this.stage.getRandomCell())
       enemy = new Enemy(cell.x, cell.y, 8, 8)
       enemy.id = this.logEntity(enemy.logType)
+      enemy.grid = this.stage.grid
+      this.enemy   = enemy
+      window.enemy = enemy
+
       enemies.push(enemy)
     }
     this.scene.add(enemies)

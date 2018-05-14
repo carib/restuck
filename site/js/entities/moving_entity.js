@@ -50,15 +50,14 @@ export default class MovingEntity extends Entity {
   }
 
   update() {
+    if (this.detectCollision()) {
+      this.resetPosition()
+    }
     this.lastX  = this.x
     this.lastY  = this.y
     this.lastX2 = this.x2
     this.lastY2 = this.y2
     this.move()
-    if (this.detectCollision()) {
-      this.resetPosition()
-      this.checkedColliders.clear()
-    }
     this.updatePosition()
   }
 
@@ -72,43 +71,44 @@ export default class MovingEntity extends Entity {
   }
 
   resetPosition() {
-    switch (this.direction) {
-      case 'WEST':
-        this.veloX = 0
-        this.x = this.lastX + 0.001
-        this.veloX += this.speed
+    this.veloX = 0
+    this.veloY = 0
+    if (this.direction === this.collisionDirection) {
+      switch (this.direction) {
+        case 'WEST':
+        this.x = this.lastX + 0.1
+        // this.veloX += this.speed * 2
         break;
-      case 'NORTH':
-        this.veloY = 0
-        this.y = this.lastY + 0.001
-        this.veloY += this.speed
+        case 'NORTH':
+        this.y = this.lastY + 0.1
+        // this.veloY += this.speed * 2
         break;
-      case 'EAST':
-        this.veloX = 0
-        this.x = this.lastX - 0.001
-        this.veloX -= this.speed
+        case 'EAST':
+        this.x = this.lastX - 0.1
+        // this.veloX -= this.speed * 2
         break;
-      case 'SOUTH':
-        this.veloY = 0
-        this.y = this.lastY - 0.001
-        this.veloY -= this.speed
+        case 'SOUTH':
+        this.y = this.lastY - 0.1
+        // this.veloY -= this.speed * 2
         break;
+      }
     }
   }
 
-  detectCollision() {
-    const { x, y, x2, y2 } = this
+  detectCollision(ent1, ent2) {
+    ent1 = (ent1) ? ent1 : this
+    const { x, y, x2, y2 } = ent1
     let collision = false
     if (this.occupiedCells.size > 0) {
-      // debugger
       this.occupiedCells.forEach(cell => {
         cell.each(entity => {
           if (entity !== this) {
             if (x2 < entity.x || y2 < entity.y ||
-                x > entity.x2 || y  > entity.y2) {
+                x > entity.x2 || y > entity.y2) {
               collision = false
             } else {
               collision = true
+              this.collisionDirection = this.direction
             }
           }
         }, this)
