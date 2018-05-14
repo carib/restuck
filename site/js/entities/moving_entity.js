@@ -14,8 +14,6 @@ export default class MovingEntity extends Entity {
     this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
-
-
   watchKeys() {
     document.addEventListener('keyup', this.handleKeyPress)
     document.addEventListener('keydown', this.handleKeyPress)
@@ -27,6 +25,7 @@ export default class MovingEntity extends Entity {
       this.activeKey = e.keyCode
     } else {
       this.activeKey = null
+      // this.direction = null
     }
   }
 
@@ -34,19 +33,19 @@ export default class MovingEntity extends Entity {
     switch (this.activeKey) {
       case 37:
         this.veloX -= this.speed;
-        this.direction = 'LEFT'
+        this.direction = 'WEST'
         break;
       case 38:
         this.veloY -= this.speed;
-        this.direction = 'UP'
+        this.direction = 'NORTH'
         break;
       case 39:
         this.veloX += this.speed;
-        this.direction = 'RIGHT'
+        this.direction = 'EAST'
         break;
       case 40:
         this.veloY += this.speed;
-        this.direction = 'DOWN'
+        this.direction = 'SOUTH'
         break;
     }
   }
@@ -62,7 +61,6 @@ export default class MovingEntity extends Entity {
       this.checkedColliders.clear()
     }
     this.updatePosition()
-    this.occupiedCells.clear()
   }
 
   updatePosition() {
@@ -76,31 +74,33 @@ export default class MovingEntity extends Entity {
 
   resetPosition() {
     switch (this.direction) {
-      case 'LEFT':
+      case 'WEST':
         this.veloX = 0
-        this.x = this.lastX + 2
+        this.x = this.lastX + 0.001
+        this.veloX += this.speed
         break;
-      case 'UP':
+      case 'NORTH':
         this.veloY = 0
-        this.y = this.lastY + 2
+        this.y = this.lastY + 0.001
+        this.veloY += this.speed
         break;
-      case 'DOWN':
-        this.veloY = 0
-        this.y = this.lastY - 2
-        break;
-      case 'RIGHT':
+      case 'EAST':
         this.veloX = 0
-        this.x = this.lastX - 2
+        this.x = this.lastX - 0.001
+        this.veloX -= this.speed
         break;
-      default:
-
+      case 'SOUTH':
+        this.veloY = 0
+        this.y = this.lastY - 0.001
+        this.veloY -= this.speed
+        break;
     }
   }
 
   detectCollision() {
     const { x, y, x2, y2 } = this
     let collision = false
-    if (this.occupiedCells.size > 1) {
+    if (this.occupiedCells.size > 0) {
       this.occupiedCells.forEach(cell => {
         cell.forEach(entity => {
           if (entity !== this) {
@@ -110,7 +110,6 @@ export default class MovingEntity extends Entity {
             } else {
               collision = true
             }
-            // this.checkedColliders.add(entity)
           }
         }, this)
       }, this)

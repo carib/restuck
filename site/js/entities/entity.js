@@ -14,7 +14,6 @@ export default class Entity {
     this.cells    = new Set()
     this.occupiedCells = new Set()
 
-
     this.update = this.update.bind(this)
     this.render = this.render.bind(this)
   }

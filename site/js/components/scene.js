@@ -38,10 +38,12 @@ export default class Scene extends Canvas {
     ctx.clip()
 
     ctx.translate(x, y)
-    
+
     this.stage.entities = this.entities
     entities.forEach(entity => {
-      entity.update()
+      if (entity.id !== 'wall') {
+        entity.update()
+      }
     })
 
     ctx.closePath()
