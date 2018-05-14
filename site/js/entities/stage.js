@@ -3,7 +3,6 @@ import { Cell, Grid } from './map_grid'
 
 export default class Stage {
   constructor(root) {
-    // super()
     this.root     = root
     this.cellSize = document.getElementById('protoCell').clientWidth
     this.entities = new Set()
@@ -14,6 +13,7 @@ export default class Stage {
     this.updateCells     = this.updateCells.bind(this)
     this.getRandomCell   = this.getRandomCell.bind(this)
     this.generateTerrain = this.generateTerrain.bind(this)
+    this.buildStageBorder   = this.buildStageBorder.bind(this)
   }
 
   update() {
@@ -29,8 +29,11 @@ export default class Stage {
     let row
     let col
     let wall
-    this.cells.each(id => {
-      split = this.cells.parseYX(id)
+    this.cells.forEach(cell => {
+      if (!cell || !cell.coords) {
+        debugger
+      }
+      split = this.grid.parseYX(cell.coords)
       row = split.y
       col = split.x
       if (row === 0 ||
@@ -47,7 +50,7 @@ export default class Stage {
     const coords = `${y},${x}`
     wall.id = 'wall'
     this.scene.add(wall)
-    this.cells.get(coords).add(wall)
+    this.grid.get(coords).add(wall)
   }
 
   generateTerrain() {
@@ -64,7 +67,7 @@ export default class Stage {
   growVoid(length, size, startX, startY) {
     if (!size) return;
     let randCell = this.getRandomCell()
-    let split    = this.cells.parseYX(randCell)
+    let split    = this.grid.parseYX(randCell)
     startY = (startY) ? startY : split.y
     startX = (startX) ? startX : split.x
     const cSize = this.cellSize
@@ -100,8 +103,8 @@ export default class Stage {
     row = (row < 0) ? 20 : row
     mockEnt.x  = col * this.cellSize
     mockEnt.y  = row * this.cellSize
-    randomCell = this.cells.getCellAt(mockEnt.y, mockEnt.x)
-    if (this.cells.get(randomCell).size() > 0) {
+    randomCell = this.grid.getCellAt(mockEnt.y, mockEnt.x)
+    if (this.grid.get(randomCell).size() > 0) {
       return this.getRandomCell()
     }
     return randomCell
@@ -113,17 +116,17 @@ export default class Stage {
       if (ent !== this && ent.id !== 'wall') {
         entityCells = this.getEntityCells(ent)
         ent.cells.forEach(cell => {
-          this.cells.get(cell).remove(ent)
+          this.grid.get(cell).remove(ent)
         }, this)
         ent.cells.clear()
         Object.values(entityCells).forEach(cell => {
-          this.cells.get(cell).add(ent)
+          this.grid.get(cell).add(ent)
         }, this)
         Object.values(entityCells).forEach(cell => {
           ent.cells.add(cell)
-          if (this.cells.get(cell).size() > 1) {
+          if (this.grid.get(cell).size() > 1) {
             ent.occupiedCells.clear()
-            ent.occupiedCells.add(this.cells.get(cell))
+            ent.occupiedCells.add(this.grid.get(cell))
           }
         }, this)
       }
@@ -133,10 +136,10 @@ export default class Stage {
   getEntityCells(entity) {
     const { x, y, x2, y2 } = entity
     return {
-      topLeft:  this.cells.getCellAt(y, x),
-      topRight: this.cells.getCellAt(y, x2),
-      btmLeft:  this.cells.getCellAt(y2, x),
-      btmRight: this.cells.getCellAt(y2, x2)
+      topLeft:  this.grid.getCellAt(y, x),
+      topRight: this.grid.getCellAt(y, x2),
+      btmLeft:  this.grid.getCellAt(y2, x),
+      btmRight: this.grid.getCellAt(y2, x2)
     }
   }
 
@@ -144,24 +147,25 @@ export default class Stage {
     this.numRows  = this.root.clientHeight / this.cellSize
     this.numCols  = this.root.clientWidth / this.cellSize
     this.numCells = this.numRows * this.numCols;
-    const cells   = new Grid(this.numRows, this.numCosl);
+    const grid   = new Grid(this.numRows, this.numCosl);
 
     for (let i = 0; i < this.numCells; i++) {
       let col    = (i % 10000 % this.numCols) * this.cellSize;
       let row    = Math.floor(i / this.numCols) * this.cellSize;
       let coords = `${row},${col}`
       let cell   = new Cell(coords)
-      cells.add(cell)
+      grid.add(cell)
     }
-    this.cells = cells;
-    return this.cells;
+    this.grid  = grid;
+    this.cells = this.grid.cells
+    return this.grid;
   }
 
   gridOverlay() {
-    const cells = this.cells
+    const cells = this.grid
     const grid = document.createElement('div')
     grid.id = 'grid'
-    this.cells.each(cell => {
+    this.grid.each(cell => {
       let gridCell = document.createElement('div')
       gridCell.classList.add('cell')
       gridCell.id = cell.coords

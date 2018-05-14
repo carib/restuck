@@ -12,7 +12,7 @@ export default class Game {
   }
 
   init() {
-    this.scene  = new Scene(0, 0, root)
+    this.scene  = new Scene(0, 0, this.root)
     this.engine = new Engine(1000/30, this.scene.render, this.scene.update)
     this.stage  = new Stage(this.root)
     this.scene.add([
@@ -33,8 +33,11 @@ export default class Game {
     window.cell2 = new Cell('310,470')
     window.grid = new Grid(this.stage.numRows, this.stage.numCols)
     /////////////////////////////
-
     this.engine.play()
+  }
+
+  handleClick(e) {
+    debugger
   }
 
   addCharacters() {
@@ -46,7 +49,7 @@ export default class Game {
   }
 
   createPlayer() {
-    const cell     = this.stage.cells.parseYX(this.stage.getRandomCell())
+    const cell     = this.stage.grid.parseYX(this.stage.getRandomCell())
     this.player    = new Player(cell.x, cell.y, 8, 8)
     this.player.id = this.logEntity(this.player.logType)
     document.addEventListener('keyup', this.player.handleKeyPress)
@@ -62,7 +65,7 @@ export default class Game {
     let cell
     let enemy
     for (let i = 0; i < numEnemies; i++) {
-      cell  = this.stage.cells.parseYX(this.stage.getRandomCell())
+      cell  = this.stage.grid.parseYX(this.stage.getRandomCell())
       enemy = new Enemy(cell.x, cell.y, 8, 8)
       enemy.id = this.logEntity(enemy.logType)
       enemies.push(enemy)

@@ -9,7 +9,19 @@ export default class Grid {
   }
 
   each(callback) {
-    this.cells.forEach(cell => callback)
+    if (callback) {
+      this.cells.forEach(cell => callback(cell))
+    }
+  }
+
+  eachKey(callback) {
+    if (callback) {
+      for (var i = 0; i < this.cells.keys().length; i++) {
+        this.apply(this.cells.keys()[i], callback)
+      }
+    } else {
+      return this.cells.keys()
+    }
   }
 
   has(cell) {

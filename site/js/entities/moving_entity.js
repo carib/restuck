@@ -25,7 +25,6 @@ export default class MovingEntity extends Entity {
       this.activeKey = e.keyCode
     } else {
       this.activeKey = null
-      // this.direction = null
     }
   }
 
