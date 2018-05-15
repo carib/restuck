@@ -5,6 +5,7 @@ import { Player, Enemy } from '../entities/characters'
 import Cell from '../entities/map_grid/cell'
 import Grid from '../entities/map_grid/grid'
 import Pathfinder from '../entities/map_grid/pathfinder'
+import Heap from '../entities/map_grid/heap'
 
 export default class Game {
   constructor(root) {
@@ -28,19 +29,34 @@ export default class Game {
     window.player = this.player
     window.gLog   = this.gameLog
 
+    // stage.gridOverlay()
 
     const start = this.enemy.coords
     const goal  = this.player.coords
-    const grid  = this.stage.grid
-    const pf    = new Pathfinder(grid, start, goal)
-    window.pf = pf
-    pf.initGrid()
+    window.grid  = this.stage.grid
+
+    window.heap = new Heap()
+    window.path  = new Pathfinder(grid, start, goal)
+    path.initPathfinder(stage.grid, enemy.coords, player.coords)
+    this.highlightPath()
     /////////////////////////////
+
+
     this.engine.play()
   }
 
-  handleClick(e) {
-    debugger
+  highlightPath() {
+    path.path.pop()
+    path.path.forEach(cell => {
+      if (cell.coords !== player.coords) {
+
+      }
+      let ent = new Entity(cell.x, cell.y, 10, 10)
+      ent.color = '#c6ece9'
+      setTimeout(() => {
+        this.scene.add(ent)
+      },1)
+    })
   }
 
   addCharacters() {
@@ -53,7 +69,7 @@ export default class Game {
 
   createPlayer() {
     const cell     = this.stage.grid.parseYX(this.stage.getRandomCell())
-    this.player    = new Player(cell.x, cell.y, 8, 8)
+    this.player    = new Player(cell.x, cell.y, 10, 10)
     this.player.id = this.logEntity(this.player.logType)
     document.addEventListener('keyup', this.player.handleKeyPress)
     document.addEventListener('keydown', this.player.handleKeyPress)
@@ -69,7 +85,7 @@ export default class Game {
     let enemy
     for (let i = 0; i < numEnemies; i++) {
       cell  = this.stage.grid.parseYX(this.stage.getRandomCell())
-      enemy = new Enemy(cell.x, cell.y, 8, 8)
+      enemy = new Enemy(cell.x, cell.y, 10, 10)
       enemy.id = this.logEntity(enemy.logType)
       enemy.grid = this.stage.grid
       this.enemy   = enemy

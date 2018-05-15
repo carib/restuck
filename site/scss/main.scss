@@ -16,7 +16,7 @@ canvas {
 
 #root {
   position: fixed;
-  top: 10px;
+  top: 50px;
   left: 0;
   height: 320px;
   width: 480px;
@@ -27,7 +27,7 @@ canvas {
 
 #grid {
   position: fixed;
-  top: 10px;
+  top: 50px;
   left: 0px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -52,4 +52,13 @@ canvas {
   border-bottom: 1px solid #dadada;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+}
+
+
+.path {
+  color: #4179f7 !important;
+}
+
+.closed {
+  color: #f8f6bb;
 }

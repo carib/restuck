@@ -29,9 +29,6 @@ export default class Stage {
     let col
     let wall
     this.cells.forEach(cell => {
-      if (!cell || !cell.coords) {
-        debugger
-      }
       split = this.grid.parseYX(cell.coords)
       row = split.y
       col = split.x
@@ -56,8 +53,7 @@ export default class Stage {
     this.buildCellGrid()
     this.grid.linkGridCells()
     this.buildStageBorder()
-    this.gridOverlay()
-    const numVoids = 20
+    const numVoids = 100
     const voidSize = 5
     for (let i = 0; i < numVoids; i++) {
       this.growVoid(voidSize, voidSize)

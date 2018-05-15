@@ -1,29 +1,25 @@
 export default class Cell {
   constructor(coordString) {
-    // String coordinates as 'yCoord,xCoord'
     this.coords  = coordString
-    // Is this cell a 'Sentinel' cell of grid
     this.isFirst = false
     this.isLast  = false
-    // Adjacent cells
     this.links   = new Set()
-    // Body/Contents of this cell
     this.cell    = new Set()
-    // This cell y,x coords as Integers
+    this.mCost   = 1
     this.y       = null
     this.x       = null
-    // Individual cells from links set if present, otherwise null
+
     this.w       = null
     this.n       = null
     this.e       = null
     this.s       = null
 
-    this.size   = this.size.bind(this)
     this.has    = this.has.bind(this)
-    this.each   = this.each.bind(this)
     this.add    = this.add.bind(this)
-    this.remove = this.remove.bind(this)
+    this.size   = this.size.bind(this)
+    this.each   = this.each.bind(this)
     this.clear  = this.clear.bind(this)
+    this.remove = this.remove.bind(this)
   }
 
   size() {
@@ -32,7 +28,11 @@ export default class Cell {
 
   has(value) {
     if (typeof value === 'string') {
-      this.cell.forEach(entity => (entity.id === value))
+      let result
+      this.cell.forEach(entity => {
+        result = entity.id === value
+      })
+      return result
     }
     return this.cell.has(value)
   }
