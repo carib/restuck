@@ -2,10 +2,12 @@ import { Wall } from './tiles'
 import { Cell, Grid } from './map_grid'
 
 export default class Stage {
-  constructor(root) {
+  constructor(root, numVoids, voidSize) {
     this.root     = root
     this.cellSize = document.getElementById('protoCell').clientWidth
     this.entities = new Set()
+    this.numVoids = numVoids
+    this.voidSize = voidSize
 
     this.render           = this.render.bind(this)
     this.update           = this.update.bind(this)
@@ -53,8 +55,8 @@ export default class Stage {
     this.buildCellGrid()
     this.grid.linkGridCells()
     this.buildStageBorder()
-    const numVoids = 100
-    const voidSize = 5
+    const numVoids = this.numVoids
+    const voidSize = this.voidSize
     for (let i = 0; i < numVoids; i++) {
       this.growVoid(voidSize, voidSize)
     }

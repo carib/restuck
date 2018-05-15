@@ -17,7 +17,7 @@ canvas {
 #root {
   position: fixed;
   top: 50px;
-  left: 0;
+  left: 5px;
   height: 320px;
   width: 480px;
   background: #fff;
@@ -28,7 +28,7 @@ canvas {
 #grid {
   position: fixed;
   top: 50px;
-  left: 0px;
+  left: 5px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

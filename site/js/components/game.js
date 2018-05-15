@@ -16,7 +16,7 @@ export default class Game {
   init() {
     this.scene  = new Scene(0, 0, this.root)
     this.engine = new Engine(1000/30, this.scene.render, this.scene.update)
-    this.stage  = new Stage(this.root)
+    this.stage  = new Stage(this.root, 100, 5)
     this.scene.add([
       this.stage,
     ])
@@ -53,9 +53,6 @@ export default class Game {
       }
       let ent = new Entity(cell.x, cell.y, 10, 10)
       ent.color = '#c6ece9'
-      setTimeout(() => {
-        this.scene.add(ent)
-      },1)
     })
   }
 
