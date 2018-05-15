@@ -17,13 +17,13 @@ export default class Pathfinder {
     return cells
   }
 
-  initPathfinder(grid, startCoords, targetCoords) {
+  initPathfinder(grid, entity, target) {
     this.open.clear()
     this.initGrid(grid)
     this.cost   = 0
-    this.goal   = this.cells.get(targetCoords)
-    this.start  = this.openNode(startCoords)
-    this.goalXY = this.grid.parseYX(targetCoords)
+    this.goal   = this.cells.get(target.coords)
+    this.start  = this.openNode(entity.coords)
+    this.goalXY = this.grid.parseYX(target.coords)
     this.findPath()
   }
 
@@ -31,7 +31,6 @@ export default class Pathfinder {
     const path = []
     let cell = this.goal
     while (cell !== this.start) {
-
       path.unshift(cell)
       cell = cell.parent
       if (cell === null) {
@@ -48,9 +47,7 @@ export default class Pathfinder {
     while (this.open.size() > 1) {
       current = this.getNext()
       if (current.coords === this.goal.coords) {
-        console.log('TRUE!');
-
-        return this.rebuildPath()
+        this.rebuildPath()
       }
       for (let link of current.linked) {
         cost = current.g + this.findMCost(current, link)

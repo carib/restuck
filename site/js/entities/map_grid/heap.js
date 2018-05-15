@@ -1,30 +1,5 @@
-// newCellNode(gridCell) {
-//   const { coords, links, x, y, mCost } = gridCell
-//   const newCellNode = {}
-//
-//   newCellNode.coords = coords
-//   newCellNode.x = x
-//   newCellNode.y = y
-//   newCellNode.g = 0
-//   newCellNode.h = this.getHScore(x, y)
-//   newCellNode.m = mCost
-//   newCellNode.isOpen   = false
-//   newCellNode.isClosed = false
-//   newCellNode.visited  = false
-//   newCellNode.isStart  = (coords === this.start) ? true : false
-//   newCellNode.isGoal   = (coords === this.goal)  ? true : false
-//   newCellNode.isWall   = gridCell.has('wall')
-//   newCellNode.parent   = null
-//   newCellNode.linked   = []
-//
-//   newCellNode.g = this.getGScore(newCellNode)
-//   links.forEach(coords => newCellNode.linked.push(coords))
-//   return newCellNode
-// }
-
 class Node {
   constructor(cell) {
-    // this.cell      = cell
     this.cell      = cell.coords
     this.score     = cell.g + cell.h
     this.neighbors = cell.linked

@@ -7,49 +7,72 @@ export default class MovingEntity extends Entity {
     this.veloX    = 0
     this.veloY    = 0
     this.friction = 0.9
-    this.checkedColliders = new Set()
-    this.watchKeys()
-    this.update = this.update.bind(this)
+
+    // this.watchKeys()
+    this.update         = this.update.bind(this)
     this.updatePosition = this.updatePosition.bind(this)
-    this.handleKeyPress = this.handleKeyPress.bind(this)
+    // this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
-  watchKeys() {
-    document.addEventListener('keyup', this.handleKeyPress)
-    document.addEventListener('keydown', this.handleKeyPress)
-  }
+  // watchKeys() {
+  //   document.addEventListener('keyup', this.handleKeyPress)
+  //   document.addEventListener('keydown', this.handleKeyPress)
+  // }
 
-  handleKeyPress(e) {
-    let keydown = (e.type === 'keydown') ? true : false
-    if (keydown) {
-      this.activeKey = e.keyCode
-    } else {
-      this.activeKey = null
-    }
-  }
+  // handleKeyPress(e) {
+  //   let keydown = (e.type === 'keydown') ? true : false
+  //   if (keydown) {
+  //     this.activeKey = e.keyCode
+  //     switch (e.keyCode) {
+  //       case 37:
+  //         this.direction = 'WEST'
+  //         break;
+  //       case 38:
+  //         this.direction = 'NORTH'
+  //         break;
+  //       case 39:
+  //         this.direction = 'EAST'
+  //         break;
+  //       case 40:
+  //         this.direction = 'SOUTH'
+  //         break;
+  //     }
+  //   } else {
+  //     this.activeKey = null
+  //     if (this.activeKey === 37 || this.activeKey === 39) {
+  //       this.veloX -= this.speed / 3
+  //
+  //     }
+  //     if (this.activeKey === 38 || this.activeKey === 40) {
+  //       this.veloY -= this.speed / 3
+  //     }
+  //   }
+  // }
 
   move() {
-    switch (this.activeKey) {
-      case 37:
-        this.veloX -= this.speed;
-        this.direction = 'WEST'
-        break;
-      case 38:
-        this.veloY -= this.speed;
-        this.direction = 'NORTH'
-        break;
-      case 39:
-        this.veloX += this.speed;
-        this.direction = 'EAST'
-        break;
-      case 40:
-        this.veloY += this.speed;
-        this.direction = 'SOUTH'
-        break;
+    if (this.activeKey) {
+      switch (this.direction) {
+        case 'WEST':
+          this.veloX -= this.speed;
+          break;
+        case 'NORTH':
+          this.veloY -= this.speed;
+          break;
+        case 'EAST':
+          this.veloX += this.speed;
+          break;
+        case 'SOUTH':
+          this.veloY += this.speed;
+          break;
+      }
     }
   }
 
   update() {
+    this.updatePosition()
+  }
+
+  updatePosition() {
     if (this.detectCollision()) {
       this.resetPosition()
     }
@@ -58,10 +81,6 @@ export default class MovingEntity extends Entity {
     this.lastX2 = this.x2
     this.lastY2 = this.y2
     this.move()
-    this.updatePosition()
-  }
-
-  updatePosition() {
     this.x     += this.veloX
     this.y     += this.veloY
     this.veloX *= this.friction

@@ -1,5 +1,4 @@
-import { Wall } from './tiles'
-import { Cell, Grid } from './map_grid'
+import { Cell, Grid, Wall } from './'
 
 export default class Stage {
   constructor(root, numVoids, voidSize) {

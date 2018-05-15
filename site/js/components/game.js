@@ -1,11 +1,12 @@
 import { Scene, Engine } from './index'
-import { Entity, Stage } from '../entities'
-import { Player, Enemy } from '../entities/characters'
+import KeyWatcher from './keys'
 
-import Cell from '../entities/map_grid/cell'
-import Grid from '../entities/map_grid/grid'
-import Pathfinder from '../entities/map_grid/pathfinder'
-import Heap from '../entities/map_grid/heap'
+import {
+  Entity, Stage,
+  Player, Enemy,
+  Cell, Grid,
+  Pathfinder, Heap,
+} from '../entities'
 
 export default class Game {
   constructor(root) {
@@ -14,12 +15,14 @@ export default class Game {
   }
 
   init() {
+    this.keys   = new KeyWatcher()
     this.scene  = new Scene(0, 0, this.root)
     this.engine = new Engine(1000/30, this.scene.render, this.scene.update)
-    this.stage  = new Stage(this.root, 100, 5)
+    this.stage  = new Stage(this.root, 5, 5)
     this.scene.add([
       this.stage,
     ])
+    this.keys.watchKeys()
     this.stage.generateTerrain()
     this.addCharacters()
 
@@ -36,29 +39,21 @@ export default class Game {
     window.grid  = this.stage.grid
 
     window.heap = new Heap()
-    window.path  = new Pathfinder(grid, start, goal)
-    path.initPathfinder(stage.grid, enemy.coords, player.coords)
-    this.highlightPath()
+    window.path = new Pathfinder()
+    // path.initPathfinder(stage.grid, enemy, player)
+    // this.highlightPath()
     /////////////////////////////
 
 
     this.engine.play()
   }
 
-  highlightPath() {
-    path.path.pop()
-    path.path.forEach(cell => {
-      if (cell.coords !== player.coords) {
-
-      }
-      let ent = new Entity(cell.x, cell.y, 10, 10)
-      ent.color = '#c6ece9'
-    })
-  }
-
   addCharacters() {
-    this.createNPCs()
     this.createPlayer()
+    this.createNPCs()
+    this.keys.add([
+      this.player,
+    ])
     this.scene.add([
       this.player,
     ])
@@ -66,7 +61,7 @@ export default class Game {
 
   createPlayer() {
     const cell     = this.stage.grid.parseYX(this.stage.getRandomCell())
-    this.player    = new Player(cell.x, cell.y, 10, 10)
+    this.player    = new Player(cell.x, cell.y, 8, 8)
     this.player.id = this.logEntity(this.player.logType)
     document.addEventListener('keyup', this.player.handleKeyPress)
     document.addEventListener('keydown', this.player.handleKeyPress)
@@ -82,14 +77,17 @@ export default class Game {
     let enemy
     for (let i = 0; i < numEnemies; i++) {
       cell  = this.stage.grid.parseYX(this.stage.getRandomCell())
-      enemy = new Enemy(cell.x, cell.y, 10, 10)
-      enemy.id = this.logEntity(enemy.logType)
-      enemy.grid = this.stage.grid
+      enemy = new Enemy(cell.x, cell.y, 8, 8)
+      enemy.id     = this.logEntity(enemy.logType)
+      enemy.grid   = this.stage.grid
+      enemy.target = this.player
       this.enemy   = enemy
+
       window.enemy = enemy
 
       enemies.push(enemy)
     }
+    this.keys.add(enemies)
     this.scene.add(enemies)
   }
 

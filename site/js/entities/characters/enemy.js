@@ -1,4 +1,4 @@
-import { NonPlayerCharacter } from './'
+import { NonPlayerCharacter  } from '../'
 
 export default class Enemy extends NonPlayerCharacter {
   constructor(x, y, width, height) {
