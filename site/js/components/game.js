@@ -5,7 +5,6 @@ import { Player, Enemy } from '../entities/characters'
 import Cell from '../entities/map_grid/cell'
 import Grid from '../entities/map_grid/grid'
 import Pathfinder from '../entities/map_grid/pathfinder'
-import BinaryHeap from '../entities/map_grid/binary_heap'
 
 export default class Game {
   constructor(root) {
@@ -33,8 +32,9 @@ export default class Game {
     const start = this.enemy.coords
     const goal  = this.player.coords
     const grid  = this.stage.grid
-    window.pf   = new Pathfinder(grid, start, goal)
-    window.heap = new BinaryHeap(function (x) { return x })
+    const pf    = new Pathfinder(grid, start, goal)
+    window.pf = pf
+    pf.initGrid()
     /////////////////////////////
     this.engine.play()
   }

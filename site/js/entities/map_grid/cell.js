@@ -30,9 +30,9 @@ export default class Cell {
     return this.cell.size
   }
 
-  has(value, isId) {
-    if (isId) {
-      this.cell.each(entity => (entity.id === value))
+  has(value) {
+    if (typeof value === 'string') {
+      this.cell.forEach(entity => (entity.id === value))
     }
     return this.cell.has(value)
   }
