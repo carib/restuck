@@ -23,8 +23,4 @@ export default class KeyWatcher {
       entity.keyResponse(e)
     }
   }
-
-  setKeyRelay() {
-    this.keyRelay.set('player', setDirection)
-  }
 }

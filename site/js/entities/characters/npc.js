@@ -9,6 +9,7 @@ export default class NonPlayerCharacter extends MovingEntity {
     this.pathFound  = false
     this.pathfinder = new Pathfinder
     this.path       = []
+    this.lastPath   = []
   }
 
     keyResponse(e) {
@@ -28,46 +29,121 @@ export default class NonPlayerCharacter extends MovingEntity {
       }
     }
 
+    findTarget() {
+      this.pathfinder.initPathfinder(this.grid, this, this.target)
+      this.pathfinder.path.forEach(cell => this.path.push(cell))
+    }
+
     navigatePath() {
-      if (this.path && this.path.length === 1) {
+      if (this.path && this.path.length <= 1) {
         this.pathFound = false
       }
       if (!this.pathFound) {
         this.findTarget()
         this.pathFound = true
       }
-      if (this.activeKey) {
+      if (this.activeKey && this.path.length) {
+        this.translatePath()
         this.updatePosition()
-      }
-      const { x, y } = this.path.shift()
-      let dx = Math.floor(x - this.x)
-      let dy = Math.floor(y - this.y)
-      if (dx > 0) {
-        this.direction = 'EAST'
-        return
-      }
-      if (dx < 0) {
-        this.direction = 'WEST'
-        return
-      }
-      if (dy > 0) {
-        this.direction = 'SOUTH'
-        return
-      }
-      if (dy < 0) {
-        this.direction = 'NORTH'
-        return
+        this.lastPath = []
       }
     }
 
-    translatePath() {
-
+    resetPosition() {
+      this.veloX = 0
+      this.veloY = 0
+      this.translatePath(this.lastPath)
+      if (this.direction === this.collisionDirection) {
+        switch (this.direction) {
+          case 'WEST':
+            this.x = this.lastX + 0.1
+            break;
+          case 'NORTH':
+            this.y = this.lastY + 0.1
+            break;
+          case 'EAST':
+            this.x = this.lastX - 0.1
+            break;
+          case 'SOUTH':
+            this.y = this.lastY - 0.1
+            break;
+        }
+      }
     }
 
-    findTarget() {
-      this.pathfinder.initPathfinder(this.grid, this, this.target)
-      this.pathfinder.path.forEach(cell => this.path.push(cell))
+    follow(path) {
+      let dx = this.target.x - this.x,
+          dy = this.target.y - this.y,
+          lastX = this.x,
+          lastY = this.y,
+          absDX = Math.abs(dx),
+          absDY = Math.abs(dy)
+      for (let i = 0; i < (path.length / 3); i++) {
+        this.lastPath.unshift(path.shift())
+        let { x, y } = this.lastPath[0]
+        dx += Math.floor(x - lastX)
+        dy += Math.floor(y - lastY)
+        lastX = x
+        lastY = y
+      }
+      return {
+        absDX: absDX, absDY: absDY,
+        dx: dx, dy: dy
+      }
     }
+
+    retrace(path) {
+      path = path.slice(0)
+      let targetXY = path.slice(path.length - 1)
+      let dx = targetXY.x - this.x,
+          dy = targetXY.y - this.y,
+          lastX = this.x,
+          lastY = this.y,
+          absDX = Math.abs(dx),
+          absDY = Math.abs(dy)
+      this.lastPath = []
+      for (let i = 0; i < (path.length / 3); i++) {
+        this.lastPath.unshift(path.shift())
+        let { x, y } = this.lastPath[0]
+        dx += Math.floor(x - lastX)
+        dy += Math.floor(y - lastY)
+        lastX = x
+        lastY = y
+      }
+      return {
+        absDX: absDX, absDY: absDY,
+        dx: dx, dy: dy
+      }
+    }
+
+    translatePath(path) {
+      let pathDeltas = path ? this.retrace(path) : this.follow(this.path),
+          { absDX, absDY, dx, dy } = pathDeltas
+      if (absDX > absDY) {
+        this.veloX = 0
+        if (dx > 0) {
+          this.direction = 'EAST'
+          return
+        }
+        if (dx < 0) {
+          this.direction = 'WEST'
+          return
+        }
+      }
+      if (absDX < absDY) {
+        this.veloY = 0
+        if (dy > 0) {
+          this.direction = 'SOUTH'
+          return
+        }
+        if (dy < 0) {
+          this.direction = 'NORTH'
+          return
+        }
+      }
+    }
+
+
 
     highlightPath() {
       this.pathfinder.path.pop()

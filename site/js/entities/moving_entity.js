@@ -8,46 +8,9 @@ export default class MovingEntity extends Entity {
     this.veloY    = 0
     this.friction = 0.9
 
-    // this.watchKeys()
     this.update         = this.update.bind(this)
     this.updatePosition = this.updatePosition.bind(this)
-    // this.handleKeyPress = this.handleKeyPress.bind(this)
   }
-
-  // watchKeys() {
-  //   document.addEventListener('keyup', this.handleKeyPress)
-  //   document.addEventListener('keydown', this.handleKeyPress)
-  // }
-
-  // handleKeyPress(e) {
-  //   let keydown = (e.type === 'keydown') ? true : false
-  //   if (keydown) {
-  //     this.activeKey = e.keyCode
-  //     switch (e.keyCode) {
-  //       case 37:
-  //         this.direction = 'WEST'
-  //         break;
-  //       case 38:
-  //         this.direction = 'NORTH'
-  //         break;
-  //       case 39:
-  //         this.direction = 'EAST'
-  //         break;
-  //       case 40:
-  //         this.direction = 'SOUTH'
-  //         break;
-  //     }
-  //   } else {
-  //     this.activeKey = null
-  //     if (this.activeKey === 37 || this.activeKey === 39) {
-  //       this.veloX -= this.speed / 3
-  //
-  //     }
-  //     if (this.activeKey === 38 || this.activeKey === 40) {
-  //       this.veloY -= this.speed / 3
-  //     }
-  //   }
-  // }
 
   move() {
     if (this.activeKey) {
@@ -95,21 +58,17 @@ export default class MovingEntity extends Entity {
     if (this.direction === this.collisionDirection) {
       switch (this.direction) {
         case 'WEST':
-        this.x = this.lastX + 0.1
-        // this.veloX += this.speed * 2
-        break;
+          this.x = this.lastX + 0.1
+          break;
         case 'NORTH':
-        this.y = this.lastY + 0.1
-        // this.veloY += this.speed * 2
-        break;
+          this.y = this.lastY + 0.1
+          break;
         case 'EAST':
-        this.x = this.lastX - 0.1
-        // this.veloX -= this.speed * 2
-        break;
+          this.x = this.lastX - 0.1
+          break;
         case 'SOUTH':
-        this.y = this.lastY - 0.1
-        // this.veloY -= this.speed * 2
-        break;
+          this.y = this.lastY - 0.1
+          break;
       }
     }
   }

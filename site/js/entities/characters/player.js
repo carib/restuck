@@ -7,8 +7,6 @@ export default class Player extends MovingEntity {
     this.friction = 0.8
     this.color    = '#41f798'
     this.logType  = 'player'
-
-    // this.handleKeyPress = this.handleKeyPress.bind(this)
   }
 
   keyResponse(e) {

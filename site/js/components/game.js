@@ -18,7 +18,7 @@ export default class Game {
     this.keys   = new KeyWatcher()
     this.scene  = new Scene(0, 0, this.root)
     this.engine = new Engine(1000/30, this.scene.render, this.scene.update)
-    this.stage  = new Stage(this.root, 5, 5)
+    this.stage  = new Stage(this.root, 10, 5)
     this.scene.add([
       this.stage,
     ])
@@ -33,6 +33,8 @@ export default class Game {
     window.gLog   = this.gameLog
 
     // stage.gridOverlay()
+    // enemy.highlightPath()
+
 
     const start = this.enemy.coords
     const goal  = this.player.coords
@@ -41,7 +43,6 @@ export default class Game {
     window.heap = new Heap()
     window.path = new Pathfinder()
     // path.initPathfinder(stage.grid, enemy, player)
-    // this.highlightPath()
     /////////////////////////////
 
 
