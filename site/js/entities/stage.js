@@ -62,12 +62,15 @@ export default class Stage {
   }
 
   growVoid(length, size, startX, startY) {
+    const rootW = document.getElementById('root').clientWidth
+    const rootH = document.getElementById('root').clientHeight
     if (!size) return;
     let randCell = this.getRandomCell()
     let split    = this.grid.parseYX(randCell)
     startY = (startY) ? startY : split.y
     startX = (startX) ? startX : split.x
     const cSize = this.cellSize
+
     this.placeWall(startX, startY)
     let path = [
       [(startX + cSize), (startX - cSize)],
@@ -79,10 +82,10 @@ export default class Stage {
     ]
     startX = pick[0]
     startY = pick[1]
-    startX = (startX > 470) ? 460 : startX
-    startX = (startX < 0)   ? 20  : startX
-    startY = (startY > 310) ? 300 : startY
-    startY = (startY < 0)   ? 20  : startY
+    startX = (startX >= rootW) ? rootW - this.cellSize : startX
+    startX = (startX <= 0) ? this.cellSize : startX
+    startY = (startY >= rootH) ? rootH - this.cellSize : startY
+    startY = (startY <= 0) ? this.cellSize : startY
     if (length > 4) {
       length = 0
     }

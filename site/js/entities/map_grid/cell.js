@@ -30,6 +30,9 @@ export default class Cell {
     if (typeof value === 'string') {
       let result
       this.cell.forEach(entity => {
+        if (!entity) {
+          return false
+        }
         result = entity.id === value
       })
       return result

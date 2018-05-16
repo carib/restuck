@@ -5,25 +5,36 @@ export default class Pathfinder {
     this.open   = new Heap()
     this.closed = new Map()
     this.cost   = 0
+
+    this.log = {
+      current: {},
+      cost: {},
+      nixed: {},
+      opened: {},
+      parented: {}
+    }
   }
 
   initGrid(grid) {
     const cells = new Map()
-    this.grid = grid
-    this.grid.cells.forEach(cell => {
+    this.goalXY = grid.parseYX(this.target.coords)
+    grid.cells.forEach(cell => {
       cells.set(cell.coords, this.newCellNode(cell))
     }, this)
-    this.cells = cells
+    this.grid   = grid
+    this.cells  = cells
+    this.start  = this.openNode(this.entity.coords)
+    this.goal   = this.cells.get(this.target.coords)
     return cells
   }
 
   initPathfinder(grid, entity, target) {
     this.open.clear()
-    this.initGrid(grid)
+    this.target = target
+    this.entity = entity
     this.cost   = 0
-    this.goal   = this.cells.get(target.coords)
-    this.start  = this.openNode(entity.coords)
-    this.goalXY = this.grid.parseYX(target.coords)
+
+    this.initGrid(grid)
     this.findPath()
   }
 
@@ -38,36 +49,47 @@ export default class Pathfinder {
       }
     }
     this.path = path
+    console.log(this.log);
     return path
   }
 
   findPath() {
     let current
     let cost
+    let i = 0
     while (this.open.size() > 1) {
       current = this.getNext()
+      console.log(`Visiting: ${i}`, current);
+      i++
+      this.log.current[current.coords] = current
       if (current.coords === this.goal.coords) {
-        this.rebuildPath()
+        return this.rebuildPath()
       }
       for (let link of current.linked) {
         cost = current.g + this.findMCost(current, link)
-        if (link.isClosed && cost < this.getGScore(link)) {
-          this.openNode(link.coords)
-          link.parent = current
+        this.log.cost[current.coords] = cost
+        if (link.isOpen && cost < this.getGScore(link)) {
+          link.isOpen = false
+          this.log.nixed[link.coords] = link
           continue
         }
-        if (link.isOpen && cost < this.getGScore(link)) {
-          link.isClosed
+        if (link.isClosed && cost > this.getGScore(link)) {
+          this.openNode(link.coords)
+          link.parent = current
+          this.log.opened[link.coords] = link
           continue
         }
         if (!link.isOpen && !link.isClosed) {
           cost = link.g
+          this.cost += cost
           link.parent = current
           this.openNode(link.coords)
+          this.log.parented[link.coords] = link
         }
       }
     }
-    return this.open.sort()
+    console.log(`NO PATH EXISTS: ${this.start.coords}->${this.goal.coords}`);
+    return false
   }
 
   runTest() {
@@ -93,7 +115,10 @@ export default class Pathfinder {
     let node = this.open.remove()
     let cell = this.cells.get(node.cell)
     let linkNodes = []
-    if (cell.isClosed) {
+    if (true) {
+
+    }
+    if (cell.isWall || !cell.isOpen || cell.isClosed) {
       return this.getNext()
     }
     this.closeNode(node)
@@ -102,10 +127,21 @@ export default class Pathfinder {
     cell.f = cell.g + cell.h
     node.score = cell.f
     cell.linked.map(link => {
-      let linkNode = this.cells.get(link)
-      linkNodes.push(linkNode)
+      if (typeof link === 'string') {
+        let linkNode = this.cells.get(link)
+        if (linkNode && !linkNode.visited && !linkNode.isWall) {
+          linkNodes.push(linkNode)
+        }
+      }
     }, this)
-    cell.linked = linkNodes
+    if (linkNodes.length > 0) {
+      cell.linked = linkNodes
+    } else {
+      return this.getNext()
+    }
+    if (typeof cell.linked[0] === 'string') {
+      debugger
+    }
     return cell
   }
 
@@ -124,19 +160,20 @@ export default class Pathfinder {
   }
 
   getHScore(x, y) {
-    if (!this.goalXY) {
-      let goalXY = { x: 110, y: 60 }
-      const d1 = Math.abs(goalXY.x - x)
-      const d2 = Math.abs(goalXY.y - y)
-      return d1 + d2
-    }
+    // if (!this.goalXY) {
+    //   let goalXY = { x: 110, y: 60 }
+    //   const d1 = Math.abs(goalXY.x - x)
+    //   const d2 = Math.abs(goalXY.y - y)
+    //   return d1 + d2
+    // }
+    // debugger
     const d1 = Math.abs(this.goalXY.x - x)
     const d2 = Math.abs(this.goalXY.y - y)
     return d1 + d2
   }
 
   findMCost(fromCell, toCell) {
-    return fromCell.mCost + toCell.mCost
+    return fromCell.m + toCell.m
   }
 
   newCellNode(gridCell) {
@@ -153,9 +190,8 @@ export default class Pathfinder {
     newCellNode.isOpen   = false
     newCellNode.isClosed = false
     newCellNode.visited  = false
-    newCellNode.isStart  = (coords === this.start) ? true : false
-    newCellNode.isGoal   = (coords === this.goal)  ? true : false
-
+    newCellNode.isStart  = (coords === this.entity.coords) ? true : false
+    newCellNode.isGoal   = (coords === this.target.coords) ? true : false
     newCellNode.isWall   = gridCell.has('wall')
     newCellNode.parent   = null
     newCellNode.linked   = []

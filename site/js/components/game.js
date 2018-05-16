@@ -18,7 +18,7 @@ export default class Game {
     this.keys   = new KeyWatcher()
     this.scene  = new Scene(0, 0, this.root)
     this.engine = new Engine(1000/30, this.scene.render, this.scene.update)
-    this.stage  = new Stage(this.root, 10, 5)
+    this.stage  = new Stage(this.root, 50, 5)
     this.scene.add([
       this.stage,
     ])
@@ -61,8 +61,9 @@ export default class Game {
   }
 
   createPlayer() {
+    const size = this.stage.cellSize - 2
     const cell     = this.stage.grid.parseYX(this.stage.getRandomCell())
-    this.player    = new Player(cell.x, cell.y, 8, 8)
+    this.player    = new Player(cell.x, cell.y, size, size)
     this.player.id = this.logEntity(this.player.logType)
     document.addEventListener('keyup', this.player.handleKeyPress)
     document.addEventListener('keydown', this.player.handleKeyPress)
@@ -73,12 +74,13 @@ export default class Game {
   }
 
   createEnemies(numEnemies) {
+    const size = this.stage.cellSize - 2
     const enemies = []
     let cell
     let enemy
     for (let i = 0; i < numEnemies; i++) {
       cell  = this.stage.grid.parseYX(this.stage.getRandomCell())
-      enemy = new Enemy(cell.x, cell.y, 8, 8)
+      enemy = new Enemy(cell.x, cell.y, size, size)
       enemy.id     = this.logEntity(enemy.logType)
       enemy.grid   = this.stage.grid
       enemy.target = this.player

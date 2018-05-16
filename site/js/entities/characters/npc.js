@@ -32,6 +32,7 @@ export default class NonPlayerCharacter extends MovingEntity {
     findTarget() {
       this.pathfinder.initPathfinder(this.grid, this, this.target)
       this.pathfinder.path.forEach(cell => this.path.push(cell))
+      this.highlightPath()
     }
 
     navigatePath() {
@@ -86,6 +87,9 @@ export default class NonPlayerCharacter extends MovingEntity {
         lastX = x
         lastY = y
       }
+      // console.log('follow', this.direction);
+      // console.log('playerX', player.x, 'playerY', player.x);
+      // console.log('enemyX', enemy.x, 'enemyY', enemy.x);
       return {
         absDX: absDX, absDY: absDY,
         dx: dx, dy: dy
@@ -110,6 +114,7 @@ export default class NonPlayerCharacter extends MovingEntity {
         lastX = x
         lastY = y
       }
+      // console.log('retrace', this.direction);
       return {
         absDX: absDX, absDY: absDY,
         dx: dx, dy: dy
@@ -119,6 +124,8 @@ export default class NonPlayerCharacter extends MovingEntity {
     translatePath(path) {
       let pathDeltas = path ? this.retrace(path) : this.follow(this.path),
           { absDX, absDY, dx, dy } = pathDeltas
+          // console.log(pathDeltas);
+          // console.log('translate', this.direction);
       if (absDX > absDY) {
         this.veloX = 0
         if (dx > 0) {
@@ -142,8 +149,6 @@ export default class NonPlayerCharacter extends MovingEntity {
         }
       }
     }
-
-
 
     highlightPath() {
       this.pathfinder.path.pop()
