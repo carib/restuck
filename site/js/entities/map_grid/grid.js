@@ -28,6 +28,7 @@ export default class Grid {
     if (typeof cell === 'string') {
       return this.cells.has(cell)
     }
+    
     return this.cells.has(cell.coords)
   }
 

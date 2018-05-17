@@ -7,9 +7,18 @@ export default class MovingEntity extends Entity {
     this.veloX    = 0
     this.veloY    = 0
     this.friction = 0.9
+    this.isStuck  = false
 
     this.update         = this.update.bind(this)
     this.updatePosition = this.updatePosition.bind(this)
+  }
+
+  update() {
+    this.grid = this.scene.stage.grid
+    if (!this.isStuck) {
+      this.updatePosition()
+      this.coords = this.grid.getCellAt(Math.floor(this.y), Math.floor(this.x))
+    }
   }
 
   move() {
@@ -29,10 +38,6 @@ export default class MovingEntity extends Entity {
           break;
       }
     }
-  }
-
-  update() {
-    this.updatePosition()
   }
 
   updatePosition() {
@@ -80,7 +85,7 @@ export default class MovingEntity extends Entity {
     if (this.occupiedCells.size > 0) {
       this.occupiedCells.forEach(cell => {
         cell.each(entity => {
-          if (entity !== this) {
+          if (entity !== this && entity.id !== 'mark') {
             if (x2 < entity.x || y2 < entity.y ||
                 x > entity.x2 || y > entity.y2) {
               collision = false

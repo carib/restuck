@@ -9,6 +9,10 @@ export default class Player extends MovingEntity {
     this.logType  = 'player'
   }
 
+  getDetails() {
+    return this
+  }
+
   keyResponse(e) {
     let keydown = (e.type === 'keydown') ? true : false
     if (keydown) {

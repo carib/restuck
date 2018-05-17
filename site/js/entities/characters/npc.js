@@ -1,4 +1,4 @@
-import { MovingEntity, Entity, Pathfinder } from '../'
+import { MovingEntity, Entity, Pathfinder, PathMarker } from '../'
 
 export default class NonPlayerCharacter extends MovingEntity {
   constructor(x, y, width, height) {
@@ -7,157 +7,189 @@ export default class NonPlayerCharacter extends MovingEntity {
     this.target     = null
     this.targetXY   = null
     this.pathFound  = false
-    this.pathfinder = new Pathfinder
     this.path       = []
     this.lastPath   = []
   }
 
-    keyResponse(e) {
-      let keydown = (e.type === 'keydown') ? true : false
-      this.activeKey = e.keyCode
-      if (keydown) {
-        this.navigatePath()
-      } else {
-        this.activeKey = null
-        if (this.activeKey === 37 || this.activeKey === 39) {
-          this.veloX -= this.speed / 3
+  keyResponse(e) {
+    let keydown = (e.type === 'keydown') ? true : false
+    this.activeKey = e.keyCode
+    if (keydown) {
+      this.navigatePath()
+    } else {
+      this.activeKey = null
+      if (this.activeKey === 37 || this.activeKey === 39) {
+        this.veloX -= this.speed / 3
 
-        }
-        if (this.activeKey === 38 || this.activeKey === 40) {
-          this.veloY -= this.speed / 3
-        }
+      }
+      if (this.activeKey === 38 || this.activeKey === 40) {
+        this.veloY -= this.speed / 3
       }
     }
+  }
 
-    findTarget() {
-      this.pathfinder.initPathfinder(this.grid, this, this.target)
+  findTarget(target) {
+    target = target ? target : this.target.getDetails()
+    this.pathFound = false
+    this.pathfinder = new Pathfinder
+    this.pathfinder.initPathfinder(this.grid, this, target)
+    if (!this.pathfinder.path) {
+      this.getLost()
+    } else {
       this.pathfinder.path.forEach(cell => this.path.push(cell))
       this.highlightPath()
     }
+  }
 
-    navigatePath() {
-      if (this.path && this.path.length <= 1) {
-        this.pathFound = false
-      }
-      if (!this.pathFound) {
-        this.findTarget()
-        this.pathFound = true
-      }
-      if (this.activeKey && this.path.length) {
-        this.translatePath()
-        this.updatePosition()
-        this.lastPath = []
-      }
-    }
+  checkLogs() {
+    const logs = Object.values(this.pathfinder.log.sorts)
+    const activeLogs = []
+    logs.forEach(log => {
+      Object.keys(log).length ? activeLogs.push(log) : null
+    })
+    return activeLogs
+  }
 
-    resetPosition() {
-      this.veloX = 0
-      this.veloY = 0
-      this.translatePath(this.lastPath)
-      if (this.direction === this.collisionDirection) {
-        switch (this.direction) {
-          case 'WEST':
-            this.x = this.lastX + 0.1
-            break;
-          case 'NORTH':
-            this.y = this.lastY + 0.1
-            break;
-          case 'EAST':
-            this.x = this.lastX - 0.1
-            break;
-          case 'SOUTH':
-            this.y = this.lastY - 0.1
-            break;
+  getLost() {
+    const logs = this.checkLogs()
+    let randomCoords
+    let cell
+    let log
+    if (!logs.length) {
+      this.isStuck = true
+    } else {
+      log = Object.keys(logs[Math.floor(Math.random() * logs.length)])
+      randomCoords = log[Math.floor(Math.random() * log.length)]
+      if (this.grid.has(randomCoords)) {
+        cell = this.grid.get(randomCoords)
+        if (cell.isEmpty) {
+          this.findTarget(cell)
         }
+      } else {
+        this.getLost()
       }
     }
+  }
 
-    follow(path) {
-      let dx = this.target.x - this.x,
-          dy = this.target.y - this.y,
-          lastX = this.x,
-          lastY = this.y,
-          absDX = Math.abs(dx),
-          absDY = Math.abs(dy)
-      for (let i = 0; i < (path.length / 3); i++) {
-        this.lastPath.unshift(path.shift())
-        let { x, y } = this.lastPath[0]
-        dx += Math.floor(x - lastX)
-        dy += Math.floor(y - lastY)
-        lastX = x
-        lastY = y
-      }
-      // console.log('follow', this.direction);
-      // console.log('playerX', player.x, 'playerY', player.x);
-      // console.log('enemyX', enemy.x, 'enemyY', enemy.x);
-      return {
-        absDX: absDX, absDY: absDY,
-        dx: dx, dy: dy
-      }
+  navigatePath() {
+    if (this.path && this.path.length <= 1) {
+      this.pathFound = false
     }
-
-    retrace(path) {
-      path = path.slice(0)
-      let targetXY = path.slice(path.length - 1)
-      let dx = targetXY.x - this.x,
-          dy = targetXY.y - this.y,
-          lastX = this.x,
-          lastY = this.y,
-          absDX = Math.abs(dx),
-          absDY = Math.abs(dy)
+    if (!this.pathFound) {
+      this.findTarget()
+      this.pathFound = true
+    }
+    if (this.activeKey && this.path.length) {
+      this.translatePath()
+      this.updatePosition()
       this.lastPath = []
-      for (let i = 0; i < (path.length / 3); i++) {
-        this.lastPath.unshift(path.shift())
-        let { x, y } = this.lastPath[0]
-        dx += Math.floor(x - lastX)
-        dy += Math.floor(y - lastY)
-        lastX = x
-        lastY = y
-      }
-      // console.log('retrace', this.direction);
-      return {
-        absDX: absDX, absDY: absDY,
-        dx: dx, dy: dy
-      }
     }
+  }
 
-    translatePath(path) {
-      let pathDeltas = path ? this.retrace(path) : this.follow(this.path),
-          { absDX, absDY, dx, dy } = pathDeltas
-          // console.log(pathDeltas);
-          // console.log('translate', this.direction);
-      if (absDX > absDY) {
-        this.veloX = 0
-        if (dx > 0) {
-          this.direction = 'EAST'
-          return
-        }
-        if (dx < 0) {
-          this.direction = 'WEST'
-          return
-        }
-      }
-      if (absDX < absDY) {
-        this.veloY = 0
-        if (dy > 0) {
-          this.direction = 'SOUTH'
-          return
-        }
-        if (dy < 0) {
-          this.direction = 'NORTH'
-          return
-        }
+  resetPosition() {
+    this.veloX = 0
+    this.veloY = 0
+    this.translatePath(this.lastPath)
+    if (this.direction === this.collisionDirection) {
+      switch (this.direction) {
+        case 'WEST':
+          this.x = this.lastX + 0.1
+          break;
+        case 'NORTH':
+          this.y = this.lastY + 0.1
+          break;
+        case 'EAST':
+          this.x = this.lastX - 0.1
+          break;
+        case 'SOUTH':
+          this.y = this.lastY - 0.1
+          break;
       }
     }
+  }
 
-    highlightPath() {
-      this.pathfinder.path.pop()
-      this.pathfinder.path.forEach(cell => {
-        let ent = new Entity(cell.x, cell.y, 10, 10)
-        if (cell.coords !== player.coords) {
-          this.scene.add(ent)
-        }
-        ent.color = '#c6ece9'
-      })
+  follow(path) {
+    let dx = this.target.x - this.x,
+        dy = this.target.y - this.y,
+        lastX = this.x,
+        lastY = this.y,
+        absDX = Math.abs(dx),
+        absDY = Math.abs(dy)
+    for (let i = 0; i < (path.length / 3); i++) {
+      this.lastPath.unshift(path.shift())
+      let { x, y } = this.lastPath[0]
+      dx += Math.floor(x - lastX)
+      dy += Math.floor(y - lastY)
+      lastX = x
+      lastY = y
     }
+    return {
+      absDX: absDX, absDY: absDY,
+      dx: dx, dy: dy
+    }
+  }
+
+  retrace(path) {
+    path = path.slice(0)
+    let targetXY = path.slice(path.length - 1)
+    let dx = targetXY.x - this.x,
+        dy = targetXY.y - this.y,
+        lastX = this.x,
+        lastY = this.y,
+        absDX = Math.abs(dx),
+        absDY = Math.abs(dy)
+    this.lastPath = []
+    for (let i = 0; i < (path.length / 3); i++) {
+      this.lastPath.unshift(path.shift())
+      let { x, y } = this.lastPath[0]
+      dx += Math.floor(x - lastX)
+      dy += Math.floor(y - lastY)
+      lastX = x
+      lastY = y
+    }
+    return {
+      absDX: absDX, absDY: absDY,
+      dx: dx, dy: dy
+    }
+  }
+
+  translatePath(path) {
+    let pathDeltas = path ? this.retrace(path) : this.follow(this.path),
+        { absDX, absDY, dx, dy } = pathDeltas
+    if (absDX > absDY) {
+      this.veloX = 0
+      if (dx > 0) {
+        this.direction = 'EAST'
+        return
+      }
+      if (dx < 0) {
+        this.direction = 'WEST'
+        return
+      }
+    }
+    if (absDX < absDY) {
+      this.veloY = 0
+      if (dy > 0) {
+        this.direction = 'SOUTH'
+        return
+      }
+      if (dy < 0) {
+        this.direction = 'NORTH'
+        return
+      }
+    }
+  }
+
+  highlightPath() {
+    let path = this.path.pop()
+    this.path.forEach(cell => {
+      let pathOptions = {
+        path: cell,
+        pathName: 'npcToPlayer',
+        color: '#ff6347'
+      }
+      let pathMark = new PathMarker(pathOptions)
+      this.scene.add(pathMark)
+    })
+  }
 }

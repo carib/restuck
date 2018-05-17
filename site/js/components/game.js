@@ -18,7 +18,7 @@ export default class Game {
     this.keys   = new KeyWatcher()
     this.scene  = new Scene(0, 0, this.root)
     this.engine = new Engine(1000/30, this.scene.render, this.scene.update)
-    this.stage  = new Stage(this.root, 50, 5)
+    this.stage  = new Stage(this.root, 200, 10)
     this.scene.add([
       this.stage,
     ])
@@ -46,7 +46,7 @@ export default class Game {
     /////////////////////////////
 
 
-    this.engine.play()
+    // this.engine.play()
   }
 
   addCharacters() {
@@ -82,7 +82,6 @@ export default class Game {
       cell  = this.stage.grid.parseYX(this.stage.getRandomCell())
       enemy = new Enemy(cell.x, cell.y, size, size)
       enemy.id     = this.logEntity(enemy.logType)
-      enemy.grid   = this.stage.grid
       enemy.target = this.player
       this.enemy   = enemy
 

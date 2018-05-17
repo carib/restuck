@@ -16,8 +16,8 @@ export default class Heap {
   }
 
   has(cellNode) {
-    for (let i = 0; i < this.size(); i++) {
-      if (this.nodeAt(i).xy === cellNode.coords) {
+    for (let i = 1; i < this.size(); i++) {
+      if (this.nodeAt(i).coords === cellNode.coords) {
         return true
       }
     }

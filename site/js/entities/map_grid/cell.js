@@ -26,6 +26,10 @@ export default class Cell {
     return this.cell.size
   }
 
+  isEmpty() {
+    return !this.size()
+  }
+
   has(value) {
     if (typeof value === 'string') {
       let result
