@@ -13,7 +13,8 @@ export default class MovingEntity extends Entity {
     this.updatePosition = this.updatePosition.bind(this)
   }
 
-  update() {
+  update(timeStamp) {
+    this.timeNow = timeStamp
     this.grid = this.scene.stage.grid
     if (!this.isStuck) {
       this.updatePosition()

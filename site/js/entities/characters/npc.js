@@ -9,9 +9,14 @@ export default class NonPlayerCharacter extends MovingEntity {
     this.pathFound  = false
     this.path       = []
     this.lastPath   = []
+
+    this.navigatePath = this.navigatePath.bind(this)
+    this.findTarget = this.findTarget.bind(this)
+    this.keyResponse = this.keyResponse.bind(this)
   }
 
   keyResponse(e) {
+
     let keydown = (e.type === 'keydown') ? true : false
     this.activeKey = e.keyCode
     if (keydown) {
@@ -31,7 +36,8 @@ export default class NonPlayerCharacter extends MovingEntity {
   findTarget(target) {
     target = target ? target : this.target.getDetails()
     this.pathFound = false
-    this.pathfinder = new Pathfinder
+    this.pathfinder = new Pathfinder()
+    this.pathfinder.scene = this.scene
     this.pathfinder.initPathfinder(this.grid, this, target)
     if (!this.pathfinder.path) {
       this.getLost()

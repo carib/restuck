@@ -1,12 +1,14 @@
 import Heap from './heap'
 
 export default class Pathfinder {
-  constructor() {
+  constructor(timeStamp) {
+    this.timeNow = timeStamp
     this.open   = new Heap()
     this.closed = new Map()
     this.cost   = 0
     this.pathFound = false
     this.log = {
+      elapsed: 0,
       start: null,
       goal: null,
       visits: [],
@@ -19,15 +21,17 @@ export default class Pathfinder {
       },
       path: [],
     }
+    this.initGrid = this.initGrid.bind(this)
+    this.initPathfinder = this.initPathfinder.bind(this)
   }
 
   initGrid(grid) {
     const cells = new Map()
-    this.goalXY = grid.parseYX(this.target.coords)
+    this.grid   = grid
+    this.goalXY = this.grid.parseYX(this.target.coords)
     grid.cells.forEach(cell => {
       cells.set(cell.coords, this.newCellNode(cell))
     }, this)
-    this.grid   = grid
     this.cells  = cells
     this.start  = this.openNode(this.entity.coords)
     this.goal   = this.cells.get(this.target.coords)
@@ -37,9 +41,8 @@ export default class Pathfinder {
   }
 
   initPathfinder(grid, entity, target) {
-    if (this.pathFound) {
 
-    }
+
     this.open.clear()
     this.target = target
     this.entity = entity
@@ -61,11 +64,13 @@ export default class Pathfinder {
     }
     this.path = path
     this.pathFound = true
+
     this.log.path = path
-    console.log('PATH FOUND. LOG: ', this.log);
+    console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
   }
 
   findPath() {
+    const startTime = performance.now()
     let current
     let cost
     let i = 0
@@ -76,6 +81,8 @@ export default class Pathfinder {
       if (current) {
         this.log.sorts.current[current.coords] = current
         if (current.isGoal) {
+          this.log.elapsed = performance.now() - startTime
+
           this.rebuildPath()
           return
         }

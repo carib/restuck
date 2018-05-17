@@ -1,7 +1,6 @@
 export default class KeyWatcher {
   constructor() {
     this.entities = new Map()
-    this.keyRelay = new Map()
 
     this.watchKeys = this.watchKeys.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -9,6 +8,7 @@ export default class KeyWatcher {
 
   add(entities) {
     entities.forEach(ent => {
+      ent.keyWatch = this
       this.entities.set(ent.id, ent)
     })
   }

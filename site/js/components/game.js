@@ -46,7 +46,7 @@ export default class Game {
     /////////////////////////////
 
 
-    // this.engine.play()
+    this.engine.play()
   }
 
   addCharacters() {

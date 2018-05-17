@@ -16,15 +16,20 @@ export default class Scene extends Canvas {
     this.wrap   = this.wrap.bind(this)
     this.add    = this.add.bind(this)
     this.remove = this.remove.bind(this)
+    this.markTime = this.markTime.bind(this)
   }
 
-  render() {
+  render(timeStamp) {
     this.entities.forEach(entity => {
       entity.render()
     })
   }
 
-  update() {
+  markTime() {
+    return this.timeNow
+  }
+
+  update(timeStamp) {
     let { x, y, width, height, ctx, canvas, entities } = this
     width  = this.initWidth  || canvas.width
     height = this.initHeight || canvas.height
@@ -42,7 +47,8 @@ export default class Scene extends Canvas {
     this.stage.entities = this.entities
     entities.forEach(entity => {
       if (entity.id !== 'wall') {
-        entity.update()
+        this.timeNow = timeStamp
+        entity.update(timeStamp)
       }
     })
 
