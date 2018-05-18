@@ -41,8 +41,6 @@ export default class Pathfinder {
   }
 
   initPathfinder(grid, entity, target) {
-
-
     this.open.clear()
     this.target = target
     this.entity = entity
@@ -128,30 +126,34 @@ export default class Pathfinder {
 
   getNext() {
     let node = this.open.remove()
-    let cell = this.cells.get(node.cell)
-    let linkNodes = []
-    if (cell.isWall || !cell.isOpen || cell.isClosed) {
-      this.getNext()
-    }
-    this.closeNode(node)
-    cell.visited = true
-    cell.g = this.getGScore(cell)
-    cell.f = cell.g + cell.h
-    node.score = cell.f
-    cell.linked.map(link => {
-      if (typeof link === 'string') {
-        let linkNode = this.cells.get(link)
-        if (linkNode && !linkNode.visited && !linkNode.isWall) {
-          linkNodes.push(linkNode)
-        }
+    let linkNodes
+    let linkNode
+    if (node) {
+      let cell = this.cells.get(node.cell)
+      linkNodes = []
+      if (cell.isWall || !cell.isOpen || cell.isClosed) {
+        this.getNext()
       }
-    }, this)
-    if (linkNodes.length > 0) {
-      cell.linked = linkNodes
-      return cell
-    }
-    if (!this.nullPath) {
-      this.checkNullPath()
+      this.closeNode(node)
+      cell.visited = true
+      cell.g = this.getGScore(cell)
+      cell.f = cell.g + cell.h
+      node.score = cell.f
+      cell.linked.map(link => {
+        if (typeof link === 'string') {
+          linkNode = this.cells.get(link)
+          if (linkNode && !linkNode.visited && !linkNode.isWall) {
+            linkNodes.push(linkNode)
+          }
+        }
+      }, this)
+      if (linkNodes.length > 0) {
+        cell.linked = linkNodes
+        return cell
+      }
+      if (!this.nullPath) {
+        this.checkNullPath()
+      }
     }
   }
 

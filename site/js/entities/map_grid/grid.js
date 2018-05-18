@@ -1,10 +1,10 @@
 export default class Grid {
-  constructor(numRows, numCols) {
-    this.rows     = numRows
-    this.cols     = numCols
+  constructor(options) {
+    this.rows     = options.numRows
+    this.cols     = options.numCols
+    this.cellSize = options.cellSize
     this.first    = null
     this.last     = null
-    this.cellSize = document.getElementById('protoCell').clientWidth
     this.cells    = new Map()
   }
 
@@ -28,7 +28,7 @@ export default class Grid {
     if (typeof cell === 'string') {
       return this.cells.has(cell)
     }
-    
+
     return this.cells.has(cell.coords)
   }
 
@@ -65,6 +65,9 @@ export default class Grid {
   get(cell) {
     if (typeof cell === 'string') {
       return this.cells.get(cell)
+    }
+    if (!cell || !cell.coords) {
+      debugger
     }
     return this.cells.get(cell.coords)
   }

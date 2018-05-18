@@ -1,14 +1,15 @@
 import { MovingEntity, Entity, Pathfinder, PathMarker } from '../'
 
 export default class NonPlayerCharacter extends MovingEntity {
-  constructor(x, y, width, height) {
-    super(x, y, width, height)
+  constructor(options) {
+    super(options)
     this.grid       = null
     this.target     = null
     this.targetXY   = null
     this.pathFound  = false
     this.path       = []
     this.lastPath   = []
+    this.listenting = false
 
     this.navigatePath = this.navigatePath.bind(this)
     this.findTarget = this.findTarget.bind(this)
@@ -16,7 +17,6 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   keyResponse(e) {
-
     let keydown = (e.type === 'keydown') ? true : false
     this.activeKey = e.keyCode
     if (keydown) {
@@ -43,7 +43,7 @@ export default class NonPlayerCharacter extends MovingEntity {
       this.getLost()
     } else {
       this.pathfinder.path.forEach(cell => this.path.push(cell))
-      this.highlightPath()
+      // this.highlightPath()
     }
   }
 
@@ -192,7 +192,9 @@ export default class NonPlayerCharacter extends MovingEntity {
       let pathOptions = {
         path: cell,
         pathName: 'npcToPlayer',
-        color: '#ff6347'
+        color: '#ff6347',
+        width: this.width,
+        height: this.height,
       }
       let pathMark = new PathMarker(pathOptions)
       this.scene.add(pathMark)

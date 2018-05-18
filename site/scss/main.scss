@@ -1,7 +1,7 @@
 ////////////////////////////////////////////
 /////////// VARIABLES /////////////////////
 //////////////////////////////////////////
-$cell_size: 5px;
+$cell_size: 16px;
 $view_width: 480px;
 $view_height: 320px;
 
@@ -23,10 +23,21 @@ canvas {
           box-sizing: border-box;
 }
 
-#root {
+#ui-button-decrease-cell-size {
+  position: relative;
+  top: 70%;
+  left: 5%;
+  display: block;
+  width: 40px;
+  height: 30px;
+  border-radius: 5px;
+  color: #fff;
+}
+
+#root, #grid {
   position: fixed;
   top: 50px;
-  left: 5px;
+  left: 25px;
   height: $view_height;
   width: $view_width;
   background: #fff;
@@ -35,18 +46,11 @@ canvas {
 }
 
 #grid {
-  position: fixed;
-  top: 50px;
-  left: 5px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  height: $view_height;
-  width: $view_width;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
 }
 
 #protoCell {
@@ -62,7 +66,6 @@ canvas {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
-
 
 .path {
   color: #4179f7 !important;

@@ -1,12 +1,12 @@
 import Entity from './entity'
 
 export default class MovingEntity extends Entity {
-  constructor(x, y, width, height) {
-    super(x, y, width, height)
-    this.speed    = 0.5
+  constructor(options) {
+    super(options)
+    this.speed    = options.speed
     this.veloX    = 0
     this.veloY    = 0
-    this.friction = 0.9
+    this.friction = options.friction
     this.isStuck  = false
 
     this.update         = this.update.bind(this)

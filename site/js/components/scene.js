@@ -87,4 +87,8 @@ export default class Scene extends Canvas {
   remove(entity) {
     this.entities.delete(entity)
   }
+
+  resetScene() {
+    this.entities = new Set()
+  }
 }
