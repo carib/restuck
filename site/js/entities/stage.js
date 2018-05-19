@@ -4,13 +4,15 @@ import * as Opt from '../components/options'
 export default class Stage {
   constructor(options) {
     this.root     = options.root
-    this.cellSize = options.cellSize
     this.entities = new Set()
     this.numVoids = options.numVoids
     this.voidSize = options.voidSize
+    this.width    = options.root.clientWidth
+    this.height   = options.root.clientHeight
 
     this.render           = this.render.bind(this)
     this.update           = this.update.bind(this)
+    this.placeWall        = this.placeWall.bind(this)
     this.updateCells      = this.updateCells.bind(this)
     this.getRandomCell    = this.getRandomCell.bind(this)
     this.generateTerrain  = this.generateTerrain.bind(this)
@@ -40,14 +42,23 @@ export default class Stage {
       col = split.x
       if (row === 0 ||
           col === 0 ||
-          row === this.numRows * this.cellSize - this.cellSize ||
-          col === this.numCols * this.cellSize - this.cellSize) {
+          row === this.numRows * Opt.cellSize - Opt.cellSize ||
+          col === this.numCols * Opt.cellSize - Opt.cellSize) {
         this.placeWall(col, row)
       }
     }, this)
   }
 
   placeWall(x, y) {
+    const root = document.getElementById('root')
+    const sceneW = this.numCols * Opt.cellSize
+    const sceneH = this.numRows * Opt.cellSize
+    x = (x >= sceneW) ? sceneW - Opt.cellSize : x
+    y = (y >= sceneH) ? sceneH - Opt.cellSize : y
+    let cell = this.grid.getCellAt(y, x)
+    cell = this.grid.parseYX(cell)
+    x = cell.x
+    y = cell.y
     Opt.wall.x = x
     Opt.wall.y = y
     Opt.wall.width = Opt.cellSize
@@ -71,15 +82,22 @@ export default class Stage {
   }
 
   growVoid(length, size, startX, startY) {
-    const rootW = document.getElementById('root').clientWidth
-    const rootH = document.getElementById('root').clientHeight
+    const sceneW = this.width
+    const sceneH = this.height
+    const cSize = Opt.cellSize
     if (!size) return;
     let randCell = this.getRandomCell()
-    let split    = this.grid.parseYX(randCell)
+    let split = this.grid.parseYX(randCell)
+    while (!this.grid.get(randCell)) {
+      randCell = this.getRandomCell()
+    }
+    split  = this.grid.parseYX(randCell)
     startY = (startY) ? startY : split.y
     startX = (startX) ? startX : split.x
-    const cSize = this.cellSize
-
+    startX = (startX >= sceneW) ? sceneW - Opt.cellSize : startX
+    startX = (startX <= 0) ? Opt.cellSize : startX
+    startY = (startY >= sceneH) ? sceneH - Opt.cellSize : startY
+    startY = (startY <= 0) ? Opt.cellSize : startY
     this.placeWall(startX, startY)
     let path = [
       [(startX + cSize), (startX - cSize)],
@@ -91,10 +109,6 @@ export default class Stage {
     ]
     startX = pick[0]
     startY = pick[1]
-    startX = (startX >= rootW) ? rootW - this.cellSize : startX
-    startX = (startX <= 0) ? this.cellSize : startX
-    startY = (startY >= rootH) ? rootH - this.cellSize : startY
-    startY = (startY <= 0) ? this.cellSize : startY
     if (length > 4) {
       length = 0
     }
@@ -110,8 +124,8 @@ export default class Stage {
     col = (col < 0) ? 20 : col
     row = (row > this.numRows) ? this.numRows : row
     row = (row < 0) ? 20 : row
-    mockEnt.x  = col * this.cellSize
-    mockEnt.y  = row * this.cellSize
+    mockEnt.x  = col * Opt.cellSize
+    mockEnt.y  = row * Opt.cellSize
     randomCell = this.grid.getCellAt(mockEnt.y, mockEnt.x)
     if (!randomCell) {
       debugger
@@ -160,8 +174,8 @@ export default class Stage {
   }
 
   buildCellGrid() {
-    this.numRows  = Math.floor(this.root.clientHeight / this.cellSize)
-    this.numCols  = Math.floor(this.root.clientWidth / this.cellSize)
+    this.numRows  = Math.floor(this.root.clientHeight / Opt.cellSize)
+    this.numCols  = Math.floor(this.root.clientWidth / Opt.cellSize)
     this.numCells = this.numRows * this.numCols;
     const gridOpt = {
       numRows: this.numRows,
@@ -170,8 +184,8 @@ export default class Stage {
     }
     const grid   = new Grid(gridOpt);
     for (let i = 0; i < this.numCells; i++) {
-      let col    = (i % 100000 % this.numCols) * this.cellSize;
-      let row    = Math.floor(i / this.numCols) * this.cellSize;
+      let col    = (i % 1000000 % this.numCols) * Opt.cellSize;
+      let row    = Math.floor(i / this.numCols) * Opt.cellSize;
       let coords = `${row},${col}`
       let cell   = new Cell(coords)
       grid.add(cell)

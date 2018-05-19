@@ -1,3 +1,4 @@
+
 export default class Grid {
   constructor(options) {
     this.rows     = options.numRows
@@ -6,6 +7,8 @@ export default class Grid {
     this.first    = null
     this.last     = null
     this.cells    = new Map()
+
+    this.getCellAt = this.getCellAt.bind(this)
   }
 
   each(callback) {

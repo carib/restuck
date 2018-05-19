@@ -43,7 +43,7 @@ export default class NonPlayerCharacter extends MovingEntity {
       this.getLost()
     } else {
       this.pathfinder.path.forEach(cell => this.path.push(cell))
-      // this.highlightPath()
+      this.highlightPath()
     }
   }
 

@@ -5,7 +5,6 @@ export default class Canvas {
     this.ctx    = canvas.getContext('2d')
     window.addEventListener('resize', this.resize)
     this.resize = this.resize.bind(this)
-    this.resize()
   }
 
   resize() {

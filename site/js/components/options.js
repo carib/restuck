@@ -1,10 +1,10 @@
 
-export let cellSize = 10
+export let cellSize = 4
 
 export let stage = {
   root: document.getElementById('root'),
-  numVoids: 20,
-  voidSize: 5,
+  numVoids: 3000,
+  voidSize: 3,
 }
 
 export let wall = {

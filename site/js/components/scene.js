@@ -5,10 +5,10 @@ export default class Scene extends Canvas {
     super(root)
     this.x = x
     this.y = y
-    this.initWidth  = root.width
-    this.initHeight = root.height
-    this.width  = root.width
-    this.height = root.height
+    // this.initWidth  = this.canvas.width
+    // this.initHeight = this.canvas.height
+    // this.width  = this.canvas.width
+    // this.height = this.canvas.height
     this.entities = new Set()
 
     this.render = this.render.bind(this)
@@ -31,8 +31,8 @@ export default class Scene extends Canvas {
 
   update(timeStamp) {
     let { x, y, width, height, ctx, canvas, entities } = this
-    width  = this.initWidth  || canvas.width
-    height = this.initHeight || canvas.height
+    width  = this.initWidth  || this.canvas.width
+    height = this.initHeight || this.canvas.height
 
     ctx.clearRect(x, y, width, height)
 

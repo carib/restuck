@@ -23,7 +23,7 @@ export default class PathMark {
   render() {
   let { x, y } = this.path
   let { ctx } = this.scene
-  ctx.fillStyle = this.color
+  ctx.fillStyle = '#e62c22'
   ctx.fillRect(x, y, this.width, this.height)
   }
 }
