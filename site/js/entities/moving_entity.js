@@ -64,16 +64,16 @@ export default class MovingEntity extends Entity {
     if (this.direction === this.collisionDirection) {
       switch (this.direction) {
         case 'WEST':
-          this.x = this.lastX + 0.1
+          this.x = this.lastX + 0.001
           break;
         case 'NORTH':
-          this.y = this.lastY + 0.1
+          this.y = this.lastY + 0.001
           break;
         case 'EAST':
-          this.x = this.lastX - 0.1
+          this.x = this.lastX - 0.001
           break;
         case 'SOUTH':
-          this.y = this.lastY - 0.1
+          this.y = this.lastY - 0.001
           break;
       }
     }

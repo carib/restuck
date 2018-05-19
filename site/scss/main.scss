@@ -1,10 +1,3 @@
-////////////////////////////////////////////
-/////////// VARIABLES /////////////////////
-//////////////////////////////////////////
-$cell_size: 16px;
-$view_width: 720px;
-$view_height: 480px;
-
 *{
   font-size: 12px;
   font-family: sans-serif;
@@ -15,25 +8,23 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
+  overflow: scroll;
 }
 
 body {
   background: #161c20;
+  display: grid;
+  grid-auto-columns: -webkit-max-content;
+  grid-auto-columns: max-content;
 }
 
 canvas {
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  overflow: hidden;
-}
-
-#root {
   position: fixed;
-  top: 10%;
-  left: 215px;
-  background: #fff;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  background-color: #fff;
+  top: 10%;
+  left: 150px;
 }
 
 [id$="-panel"] {
@@ -54,7 +45,7 @@ canvas {
   padding: 10px;
   background-color: #fff;
   height: 300px;
-  width: 150px;
+  width: 100px;
 }
 
 #ui-panel {
@@ -63,8 +54,8 @@ canvas {
 }
 
 #stats-panel {
-  height: 100px;
-  bottom: 33%;
+  height: 120px;
+  bottom: 30%;
   left: 2%;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
@@ -88,8 +79,8 @@ canvas {
 }
 
 .path-found-in-stats {
-  grid-template-columns: 90px 62px;
-  grid-template-rows: 20px;
+  grid-template-columns: 100px;
+  grid-template-rows: 20px 15px;
 }
 
 [id^="ui-input"] {

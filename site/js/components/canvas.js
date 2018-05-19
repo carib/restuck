@@ -1,6 +1,7 @@
+
+
 export default class Canvas {
-  constructor(root) {
-    this.root   = root
+  constructor() {
     this.canvas = document.getElementById('canvas')
     this.ctx    = canvas.getContext('2d')
     window.addEventListener('resize', this.resize)
@@ -8,8 +9,8 @@ export default class Canvas {
   }
 
   resize() {
-    let width = this.root.clientWidth
-    let height = this.root.clientHeight
+    let width  = document.documentElement.clientWidth
+    let height = document.documentElement.clientHeight
     this.canvas.width  = width
     this.canvas.height = height
   }

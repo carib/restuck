@@ -12,11 +12,10 @@ export let uiConfig = {
 }
 
 export let stage = {
-  root: getEl('root'),
   numVoids: 100,
   voidSize: 3,
-  height: 640,
-  width: 960
+  height: 320,
+  width: 480
 }
 
 export let wall = {

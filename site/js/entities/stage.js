@@ -3,13 +3,10 @@ import * as Opt from '../components/options'
 
 export default class Stage {
   constructor(options) {
-    this.root     = options.root
     this.entities = new Set()
     this.numVoids = options.numVoids
     this.voidSize = options.voidSize
-    // this.width    = options.root.clientWidth
     this.width    = Opt.stage.width
-    // this.height   = options.root.clientHeight
     this.height   = Opt.stage.height
 
     this.render           = this.render.bind(this)
@@ -55,7 +52,6 @@ export default class Stage {
   }
 
   placeWall(x, y) {
-    const root = document.getElementById('root')
     const sceneW = this.numCols * Opt.cellSize
     const sceneH = this.numRows * Opt.cellSize
     x = (x >= sceneW) ? sceneW - Opt.cellSize : x
@@ -179,8 +175,8 @@ export default class Stage {
   }
 
   buildCellGrid() {
-    this.numRows  = Math.floor(this.root.clientHeight / Opt.cellSize)
-    this.numCols  = Math.floor(this.root.clientWidth / Opt.cellSize)
+    this.numRows  = Math.floor(this.height / Opt.cellSize)
+    this.numCols  = Math.floor(this.width / Opt.cellSize)
     this.numCells = this.numRows * this.numCols;
     const gridOpt = {
       numRows: this.numRows,

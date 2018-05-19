@@ -107,7 +107,7 @@ export default class Grid {
     let split
     let row
     let col
-    split = coordString.match(/^(\d{0,3}),(\d{0,3}$)/)
+    split = coordString.match(/^(\d{0,}),(\d{0,}$)/)
     row   = parseInt(split[1])
     col   = parseInt(split[2])
     return { y: row, x: col }

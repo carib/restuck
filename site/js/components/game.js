@@ -11,15 +11,14 @@ import {
 } from '../entities'
 
 export default class Game {
-  constructor(root) {
-    this.root = root
+  constructor() {
     this.characters = []
     this.gameLog = {}
   }
 
   init() {
     this.keys   = new KeyWatcher()
-    this.scene  = new Scene(0, 0, this.root)
+    this.scene  = new Scene(0, 0)
     this.engine = new Engine(1000/30, this.scene.render, this.scene.update)
 
     this.populateScene()
@@ -36,7 +35,7 @@ export default class Game {
     delete this.scene
     this.characters = []
     this.gameLog = {}
-    this.scene = new Scene(0, 0, this.root)
+    this.scene = new Scene(0, 0)
     this.engine.update = this.scene.update
     this.engine.render = this.scene.render
     this.populateScene()
@@ -52,11 +51,6 @@ export default class Game {
   }
 
   addCharacters() {
-
-
-
-
-
     this.createPlayer()
     this.createNPCs()
 
@@ -68,7 +62,7 @@ export default class Game {
     const cell = this.stage.grid.parseYX(this.stage.getRandomCell())
     Opt.player.x = cell.x
     Opt.player.y = cell.y
-    Opt.player.width = Opt.cellSize > 2 ? Opt.cellSize - 2 : Opt.cellSize - 1
+    Opt.player.width  = Opt.cellSize > 2 ? Opt.cellSize - 2 : Opt.cellSize - 1
     Opt.player.height = Opt.cellSize > 2 ? Opt.cellSize - 2 : Opt.cellSize - 1
     this.player = new Player(Opt.player)
     this.player.id = this.logEntity(this.player.logType)

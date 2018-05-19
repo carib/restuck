@@ -69,6 +69,7 @@ export default class Cell {
     let { ctx } = this.scene
 
     ctx.strokeStyle = '#dadada'
+    ctx.lineWidth = 0.7
     ctx.strokeRect(x, y, Opt.cellSize, Opt.cellSize)
   }
 }

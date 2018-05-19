@@ -4,8 +4,7 @@ import * as UI from './components/ui'
 
 
 window.onload = () => {
-  const root  = document.getElementById('root');
-  const game  = new Game(root)
+  const game  = new Game()
 
   window.game = game
 

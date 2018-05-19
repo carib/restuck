@@ -2,8 +2,8 @@ import Canvas from './canvas'
 import * as Opt from './options'
 
 export default class Scene extends Canvas {
-  constructor(x = 0, y = 0, root) {
-    super(root)
+  constructor(x, y) {
+    super()
     this.x = x
     this.y = y
     this.entities = new Set()
@@ -31,15 +31,12 @@ export default class Scene extends Canvas {
   }
 
   update(timeStamp) {
-    let startX = Opt.getEl('ui-input-x-start-coord')
-    let startY = Opt.getEl('ui-input-y-start-coord')
-    let goalX = Opt.getEl('ui-input-x-goal-coord')
-    let goalY = Opt.getEl('ui-input-y-goal-coord')
+    let startX    = Opt.getEl('ui-input-x-start-coord')
+    let startY    = Opt.getEl('ui-input-y-start-coord')
+    let goalX     = Opt.getEl('ui-input-x-goal-coord')
+    let goalY     = Opt.getEl('ui-input-y-goal-coord')
     let pathFound = Opt.getEl('p-path-found')
     let { x, y, width, height, ctx, canvas, entities } = this
-
-    this.root.style.width = `${canvas.width}px`
-    this.root.style.height = `${canvas.height}px`
 
     canvas.width = Opt.stage.width
     canvas.height = Opt.stage.height
@@ -57,19 +54,20 @@ export default class Scene extends Canvas {
 
     ctx.translate(x, y)
 
-    this.stage.entities = this.entities
     entities.forEach(entity => {
       if (entity.id !== 'wall' && entity.logType !== 'cell') {
-        this.timeNow = timeStamp
-        entity.update(timeStamp)
+        if (!this.stage.entities.has(entity) && entity.id !== 'mark') {
+          this.stage.entities.add(entity)
+        }
+        entity.update()
       }
       if (entity.logType === 'enemy') {
         startX.innerText = `${Math.floor(entity.x)}`
         startY.innerText = `${Math.floor(entity.y)}`
+        
         if (entity.pathFound) {
           let elapsed = entity.pathfinder.log.elapsed
           pathFound.innerText = `${elapsed.toFixed(4)}ms`
-
         }
       }
       if (entity.logType === 'player') {

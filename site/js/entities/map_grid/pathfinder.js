@@ -64,7 +64,7 @@ export default class Pathfinder {
     this.pathFound = true
 
     this.log.path = path
-    console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
+    // console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
   }
 
   findPath() {
@@ -194,7 +194,7 @@ export default class Pathfinder {
         this.rebuildPath()
       } else {
         this.nullPath = true
-        console.log(`NO PATH EXISTS: ${this.start.coords}->${this.goal.coords}`, this.log);
+        // console.log(`NO PATH EXISTS: ${this.start.coords}->${this.goal.coords}`, this.log);
       }
     }
   }
