@@ -17,7 +17,6 @@ body {
 
 canvas {
   position: fixed;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   background-color: #fff;
   top: 10%;
@@ -25,18 +24,9 @@ canvas {
 
 [id$="-panel"] {
   position: fixed;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-pack: space-evenly;
-  -ms-flex-pack: space-evenly;
   justify-content: space-evenly;
-  -webkit-box-align: baseline;
-  -ms-flex-align: baseline;
   align-items: baseline;
   padding: 10px;
   background-color: #fff;
@@ -51,8 +41,6 @@ canvas {
   height: 120px;
   bottom: 30%;
   left: 2%;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
   justify-content: flex-start; }
 
 [class$="-checkbox-group"] {
@@ -64,8 +52,6 @@ canvas {
   display: grid;
   grid-template-columns: 50px 50px;
   grid-template-rows: 20px 20px;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   border-bottom: 1px solid black; }
 
