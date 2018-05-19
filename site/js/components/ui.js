@@ -10,7 +10,7 @@ const pathHighlight = Opt.getEl('grid-path-highlight-checkbox')
 
 const applyButton   = Opt.getEl('submit-stage-options')
 
-export function init() {
+export function init(game) {
 
   voidSize.value        = Opt.stage.voidSize
   numVoids.value        = Opt.stage.numVoids
@@ -33,11 +33,11 @@ export function init() {
   })
 
   applyButton.addEventListener('click', (e) => assignUISelections())
-  assignUISelections()
+  assignUISelections(game)
 }
 
 
-export function assignUISelections() {
+export function assignUISelections(game) {
   let cellSize  = Opt.getEl('ui-select-cell-size').options
   let stageDims = Opt.getEl('ui-select-stage-dimensions').options
   stageDims = stageDims[stageDims.selectedIndex].value.split('x')
