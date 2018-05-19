@@ -2847,8 +2847,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 window.onload = function () {
   var game = new _components.Game();
 
-  window.game = game;
-
   game.init();
   UI.init();
 };

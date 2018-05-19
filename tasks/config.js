@@ -7,9 +7,9 @@ const paths = {
               css: 'site/scss',
         },
         dest: {
-              root: 'build',
-              js: 'build/js',
-              css: 'build/css',
+              root: 'docs',
+              js: 'docs/js',
+              css: 'docs/css',
         }
 }
 
