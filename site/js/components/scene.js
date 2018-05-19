@@ -7,6 +7,10 @@ export default class Scene extends Canvas {
     this.x = x
     this.y = y
     this.entities = new Set()
+    this.width = Opt.stage.width
+    this.height = Opt.stage.height
+    this.initWidth = Opt.stage.width
+    this.initHeight = Opt.stage.height
 
     this.render = this.render.bind(this)
     this.update = this.update.bind(this)
@@ -33,8 +37,15 @@ export default class Scene extends Canvas {
     let goalY = Opt.getEl('ui-input-y-goal-coord')
     let pathFound = Opt.getEl('p-path-found')
     let { x, y, width, height, ctx, canvas, entities } = this
-    width  = this.initWidth  || this.canvas.width
-    height = this.initHeight || this.canvas.height
+
+    this.root.style.width = `${canvas.width}px`
+    this.root.style.height = `${canvas.height}px`
+
+    canvas.width = Opt.stage.width
+    canvas.height = Opt.stage.height
+
+    width  = this.initWidth  || canvas.width
+    height = this.initHeight || canvas.height
 
     ctx.clearRect(x, y, width, height)
 

@@ -10,7 +10,7 @@ $view_height: 480px;
   font-family: sans-serif;
 }
 
-html, body, canvas {
+html, body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -24,21 +24,20 @@ body {
 canvas {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  overflow: hidden;
 }
 
 #root {
   position: fixed;
-  top: 20%;
-  left: 15%;
-  height: $view_height;
-  width: $view_width;
+  top: 10%;
+  left: 215px;
   background: #fff;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
 
 [id$="-panel"] {
-  position: absolute;
+  position: fixed;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -59,13 +58,13 @@ canvas {
 }
 
 #ui-panel {
-  top: 20%;
+  top: 10%;
   left: 2%;
 }
 
 #stats-panel {
   height: 100px;
-  bottom: 18.5%;
+  bottom: 33%;
   left: 2%;
   -webkit-box-pack: start;
       -ms-flex-pack: start;

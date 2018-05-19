@@ -9,6 +9,6 @@ window.onload = () => {
 
   window.game = game
 
-  UI.init()
   game.init()
+  UI.init()
 }

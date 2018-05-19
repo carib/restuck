@@ -7,8 +7,10 @@ export default class Stage {
     this.entities = new Set()
     this.numVoids = options.numVoids
     this.voidSize = options.voidSize
-    this.width    = options.root.clientWidth
-    this.height   = options.root.clientHeight
+    // this.width    = options.root.clientWidth
+    this.width    = Opt.stage.width
+    // this.height   = options.root.clientHeight
+    this.height   = Opt.stage.height
 
     this.render           = this.render.bind(this)
     this.update           = this.update.bind(this)
