@@ -1,0 +1,86 @@
+* {
+  font-size: 12px;
+  font-family: sans-serif; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: scroll; }
+
+body {
+  background: #161c20;
+  display: grid;
+  grid-auto-columns: -webkit-max-content;
+  grid-auto-columns: max-content; }
+
+canvas {
+  position: fixed;
+  box-sizing: border-box;
+  background-color: #fff;
+  top: 10%;
+  left: 150px; }
+
+[id$="-panel"] {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: baseline;
+  padding: 10px;
+  background-color: #fff;
+  height: 300px;
+  width: 100px; }
+
+#ui-panel {
+  top: 10%;
+  left: 2%; }
+
+#stats-panel {
+  height: 120px;
+  bottom: 30%;
+  left: 2%;
+  justify-content: flex-start; }
+
+[class$="-checkbox-group"] {
+  display: grid;
+  grid-template-columns: 84px 15px;
+  grid-template-rows: 15px; }
+
+[class$="-stats"] {
+  display: grid;
+  grid-template-columns: 50px 50px;
+  grid-template-rows: 20px 20px;
+  align-items: center;
+  border-bottom: 1px solid black; }
+
+.path-found-in-stats {
+  grid-template-columns: 100px;
+  grid-template-rows: 20px 15px; }
+
+[id^="ui-input"] {
+  text-align: left;
+  width: 93px; }
+
+[id$="-coord"] {
+  text-align: left;
+  width: 49px; }
+
+[id^="ui-button-"] {
+  position: relative;
+  font-size: 20px;
+  line-height: 0.5;
+  color: black;
+  background-color: #fff;
+  display: block;
+  width: 40px;
+  height: 30px;
+  border-radius: 5px; }
+
+.stage-options-form {
+  padding-left: 10px;
+  height: 300px;
+  width: 200px;
+  display: block;
+  background-color: salmon; }
