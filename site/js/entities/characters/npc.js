@@ -1,4 +1,5 @@
 import { MovingEntity, Entity, Pathfinder, PathMarker } from '../'
+import * as Opt from '../../components/options'
 
 export default class NonPlayerCharacter extends MovingEntity {
   constructor(options) {
@@ -43,7 +44,9 @@ export default class NonPlayerCharacter extends MovingEntity {
       this.getLost()
     } else {
       this.pathfinder.path.forEach(cell => this.path.push(cell))
-      this.highlightPath()
+      if (Opt.uiConfig.pathHighlight) {
+        this.highlightPath()
+      }
     }
   }
 

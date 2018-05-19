@@ -2,14 +2,64 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>ReStuckeR</title>
+    <title>stucker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
+
     <main id='root'>
       <canvas id="canvas"></canvas>
     </main>
+
+
+    <aside id="ui-panel">
+      <label for="cell-size">Cell Size</label>
+      <select id="ui-select-cell-size" name="cell-size">
+        <option value="2">2</option>
+        <option value="4">4</option>
+        <option value="8">8</option>
+        <option value="10">10</option>
+        <option value="16">16</option>
+        <option value="32">32</option>
+      </select>
+      <label for="num-voids">Number of Voids</label>
+      <input id="ui-input-num-voids" type="number" name="void-amount">
+      <label for="void-size">Size of Voids</label>
+      <input id="ui-input-void-size" type="number" name="void-size">
+      <label for="num-enemies">Number of Enemies</label>
+      <input id="ui-input-num-enemies" type="number" name="enemies-amount">
+      <div class="overlay-checkbox-group">
+        <label for="grid-overlay-checkbox">Overlay Grid</label>
+        <input id="grid-overlay-checkbox" type="checkbox" name="overlay-checkbox">
+      </div>
+      <div class="path-highlight-checkbox-group">
+        <label for="grid-path-highlight-checkbox">Highlight Path</label>
+        <input id="grid-path-highlight-checkbox" type="checkbox" name="path-highlight-checkbox">
+      </div>
+      <button id="submit-stage-options" value="Apply">Apply Changes</button>
+    </aside>
+
+
+    <aside id="stats-panel">
+      <div class="start-coordinates-stats">
+        <label id="label-start-x-coord" for="x-coord">Start X:</label>
+        <p id="ui-input-x-start-coord" type="number" name="x-start-coord"></p>
+        <label id="label-start-y-coord" for="y-start-coord">Start Y:</label>
+        <p id="ui-input-y-start-coord" type="number" name="y-start-coord"></p>
+      </div>
+      <div class="goal-coordinates-stats">
+        <label id="label-goal-x-coord" for="x-goal-coord">Goal X:</label>
+        <p id="ui-input-x-goal-coord" type="number" name="x-goal-coord"></p>
+        <label id="label-goal-y-coord" for="y-goal-coord">Goal Y:</label>
+        <p id="ui-input-y-goal-coord" type="number" name="y-goal-coord"></p>
+      </div>
+      <div class="path-found-in-stats">
+        <label for="path-found-stat">Path Found In:</label>
+        <p id="p-path-found">0</p>
+      </div>
+    </aside>
+
     <script src="js/main.js"></script>
   </body>
 </html>

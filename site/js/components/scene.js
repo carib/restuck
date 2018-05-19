@@ -1,14 +1,11 @@
 import Canvas from './canvas'
+import * as Opt from './options'
 
 export default class Scene extends Canvas {
   constructor(x = 0, y = 0, root) {
     super(root)
     this.x = x
     this.y = y
-    // this.initWidth  = this.canvas.width
-    // this.initHeight = this.canvas.height
-    // this.width  = this.canvas.width
-    // this.height = this.canvas.height
     this.entities = new Set()
 
     this.render = this.render.bind(this)
@@ -30,6 +27,11 @@ export default class Scene extends Canvas {
   }
 
   update(timeStamp) {
+    let startX = Opt.getEl('ui-input-x-start-coord')
+    let startY = Opt.getEl('ui-input-y-start-coord')
+    let goalX = Opt.getEl('ui-input-x-goal-coord')
+    let goalY = Opt.getEl('ui-input-y-goal-coord')
+    let pathFound = Opt.getEl('p-path-found')
     let { x, y, width, height, ctx, canvas, entities } = this
     width  = this.initWidth  || this.canvas.width
     height = this.initHeight || this.canvas.height
@@ -46,9 +48,22 @@ export default class Scene extends Canvas {
 
     this.stage.entities = this.entities
     entities.forEach(entity => {
-      if (entity.id !== 'wall') {
+      if (entity.id !== 'wall' && entity.logType !== 'cell') {
         this.timeNow = timeStamp
         entity.update(timeStamp)
+      }
+      if (entity.logType === 'enemy') {
+        startX.innerText = `${Math.floor(entity.x)}`
+        startY.innerText = `${Math.floor(entity.y)}`
+        if (entity.pathFound) {
+          let elapsed = entity.pathfinder.log.elapsed
+          pathFound.innerText = `${elapsed.toFixed(4)}ms`
+
+        }
+      }
+      if (entity.logType === 'player') {
+        goalX.innerText = `${Math.floor(entity.x)}`
+        goalY.innerText = `${Math.floor(entity.y)}`
       }
     })
 

@@ -29,6 +29,9 @@ export default class Stage {
 
   init() {
     this.generateTerrain()
+    if (Opt.uiConfig.gridOverlay) {
+      this.toggleGridOverlay()
+    }
   }
 
   buildStageBorder() {
@@ -140,7 +143,7 @@ export default class Stage {
   updateCells() {
     let entityCells
     this.entities.forEach(ent => {
-      if (ent !== this && ent.id !== 'wall') {
+      if (ent !== this && ent.id !== 'wall' && ent.logType !== 'cell') {
         entityCells = this.getEntityCells(ent)
         ent.cells.forEach(cell => {
           this.grid.get(cell).remove(ent)
@@ -195,16 +198,14 @@ export default class Stage {
     return this.grid;
   }
 
-  gridOverlay() {
-    const cells = this.grid
-    const grid = document.createElement('div')
-    grid.id = 'grid'
-    this.grid.each(cell => {
-      let gridCell = document.createElement('div')
-      gridCell.classList.add('cell')
-      gridCell.id = cell.coords
-      grid.appendChild(gridCell)
-    })
-    this.root.appendChild(grid)
+  toggleGridOverlay() {
+    const cells = Array.from(this.grid.cells.values())
+    if (Opt.uiConfig.gridOverlay) {
+      this.scene.add(cells)
+    } else {
+      for (let i = 0; i < cells.length; i++) {
+        this.scene.remove(cells[i])
+      }
+    }
   }
 }

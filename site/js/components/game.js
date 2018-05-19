@@ -15,9 +15,6 @@ export default class Game {
     this.root = root
     this.characters = []
     this.gameLog = {}
-
-    this.handleClick = this.handleClick.bind(this)
-    this.uiActionRelay = this.uiActionRelay.bind(this)
   }
 
   init() {
@@ -31,62 +28,20 @@ export default class Game {
 
     this.scene.resize()
 
-    this.userInterface()
-
-    window.opt = Opt
     this.engine.play()
   }
 
-  userInterface() {
-    this.addUIElement('button', 'decrease-cell-size', 'click', this.handleClick)
-    this.addUIElement('button', 'increase-cell-size', 'click', this.handleClick)
-  }
-
-  addUIElement(tagName, elementId, eventType, eventCallback) {
-    const newElement = document.createElement(tagName)
-    newElement.id = `ui-${tagName}-${elementId}`
-    newElement.addEventListener(eventType, eventCallback)
-    document.body.append(newElement)
-  }
-
-  handleClick(e) {
-    const parsedId = e.target.id.match(/button-(\w*)-(.*)$/)
-    const command = parsedId[1]
-    const subject = parsedId[2]
-    this.uiActionRelay(command, subject)
-  }
-
-  uiActionRelay(command, subject) {
+  resetScene() {
     this.scene.resetScene()
-    this.scene = new Scene(0, 0)
+    delete this.scene
     this.characters = []
-    this.stage.entities = new Set()
+    this.gameLog = {}
+    this.scene = new Scene(0, 0, this.root)
     this.engine.update = this.scene.update
     this.engine.render = this.scene.render
-    const relay = {
-      decrease: {
-        'cell-size': this.decreaseCellSize
-      },
-      increase: {
-        'cell-size': this.increaseCellSize
-      }
-    }
-    relay[command][subject]()
-    this.scene.stage = this.stage
     this.populateScene()
   }
 
-  decreaseCellSize() {
-    if (Opt.cellSize > 2) {
-      Opt.cellSize -= 2
-    }
-  }
-
-  increaseCellSize() {
-    if (Opt.cellSize < 16) {
-      Opt.cellSize += 2
-    }
-  }
 
   populateScene() {
     Opt.stage.cellSize = Opt.cellSize
@@ -97,8 +52,14 @@ export default class Game {
   }
 
   addCharacters() {
+
+
+
+
+
     this.createPlayer()
     this.createNPCs()
+
     this.keys.add(this.characters)
     this.scene.add(this.characters)
   }
@@ -115,7 +76,7 @@ export default class Game {
   }
 
   createNPCs() {
-    this.createEnemies(1)
+    this.createEnemies(Opt.numEnemies)
   }
 
   createEnemies(numEnemies) {

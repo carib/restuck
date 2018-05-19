@@ -1,10 +1,22 @@
 
-export let cellSize = 4
+export function getEl(id) {
+  return document.getElementById(id)
+}
+
+export let cellSize = 10
+export let numEnemies = 1
+
+export let uiConfig = {
+  pathHighlight: true,
+  gridOverlay: true,
+}
 
 export let stage = {
-  root: document.getElementById('root'),
-  numVoids: 3000,
+  root: getEl('root'),
+  numVoids: 100,
   voidSize: 3,
+  height: 640,
+  width: 960
 }
 
 export let wall = {

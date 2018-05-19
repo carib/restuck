@@ -1,3 +1,5 @@
+import * as Opt from '../../components/options'
+
 export default class Cell {
   constructor(coordString) {
     this.coords  = coordString
@@ -8,11 +10,7 @@ export default class Cell {
     this.mCost   = 1
     this.y       = null
     this.x       = null
-
-    this.w       = null
-    this.n       = null
-    this.e       = null
-    this.s       = null
+    this.logType = 'cell'
 
     this.has    = this.has.bind(this)
     this.add    = this.add.bind(this)
@@ -64,5 +62,13 @@ export default class Cell {
         this.cell.delete(entity)
       }
     }, this)
+  }
+
+  render() {
+    let { x, y } = this
+    let { ctx } = this.scene
+
+    ctx.strokeStyle = '#dadada'
+    ctx.strokeRect(x, y, Opt.cellSize, Opt.cellSize)
   }
 }
