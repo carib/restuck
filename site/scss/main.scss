@@ -27,6 +27,91 @@ canvas {
   left: 150px;
 }
 
+.welcome-text {
+  position: relative;
+  top: 10px;
+  left: 20px;
+  letter-spacing: 0.05em;
+}
+
+[class^="welcome-line-"] {
+  color: #fff;
+}
+
+.welcome-line-one {
+  font-size: 20px;
+}
+
+.welcome-line-two {
+  font-size: 16px;
+}
+
+.welcome-title {
+  font-size: 24px;
+  font-style: italic;
+  color: tomato;
+}
+
+.welcome-text a {
+  text-decoration: none;
+  font-size: 22px;
+  color: #19838d;
+}
+
+.welcome-green {
+  color: #41f798;
+  font-size: 20px;
+}
+
+.link-holder {
+  color: #fff;
+  position: relative;
+  top: 24%;
+  left: 15px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 130px;
+}
+
+.carib-link {
+  letter-spacing: 0.02em;
+  font-size: 18px;
+  color: #8eebe3;
+  text-align: center;
+}
+
+.carib-link a {
+  font-size: 20px;
+}
+
+.social-links {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.github-link {
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.linkedin-link {
+  height: 50px;
+  width: 50px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.linkedin-link:hover {
+  transform: translateY(-5deg);
+  transition: transform 500ms ease;
+}
+
 [id$="-panel"] {
   position: fixed;
   display: -webkit-box;
