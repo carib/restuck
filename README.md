@@ -42,7 +42,7 @@ And when I added the binary heap data structure it got way way faster.
 ##### Planned
 So, I know that this algorithm isn't returning the absolute most-efficient path from A to B. I mean, look at the second image above. Clearly, there are some wasted steps in there and it's crutching pretty heavily on the walls.
 
-Cleaning that path up is first thing on my task list. To start, I'll be testing a few optimizations I've read about like [Jump Point Search](https://en.wikipedia.org/wiki/Jump_point_search), for example, looks very promising for my needs since I don't have variable terrain costs weighing down movement.
+Cleaning that path up is first thing on my task list. To start, I'll be testing a few optimizations I've read about. For example, [Jump Point Search](https://en.wikipedia.org/wiki/Jump_point_search) looks very promising for my needs since I don't have variable terrain costs weighing down movement.
 
 I'd also like to experiment with different map representations. And once I can wrap my head around it a bit tighter, I plan on trying out a [Fibonacci heap](https://en.wikipedia.org/wiki/Fibonacci_heap) which should speed things up quite a bit.
 
@@ -54,7 +54,7 @@ Finally, the simplest and most practical optimization I can think of is to just 
 This is a super straight forward [Axis-Aligned Bounding Boxes](https://en.wikipedia.org/wiki/Bounding_volume) (AABB) system. Since all the colliders are square, they're essentially their own bounding boxes. For the broad-phase detection, each moving collider maintains four map objects representing the each of the four possible grid cells they may occupy.
 
 ##### Response
-If one of these maps is found to contain more than one object (other than itself), a narrow-phase check for intersections is triggered. If any intersection is present, the collider is reset to its last known xy position and its velocity is dropped to 0.
+If one of these maps is found to contain more than one object (other than itself), a narrow-phase check for intersections is triggered. If any intersection is present, the collider is reset to its last known xy position and its velocity is dropped to zero.
 
 ##### Planned
 I'm still not completely satisfied with the response part of this. In some cases the colliders will stick to the walls, and in rare instances the walls will actually swallow them up!
@@ -76,6 +76,6 @@ After the general refactoring and clean up, my ASAP priorities are:
 * Add basic RPG elements like combat, items, and experience
 * Introduce character creation and persistent data
 
-Please feel free to email me at <yes@carib.codes> if you have any feedback or questions or would otherwise like to discuss any of the topics covered here. I'm brand new at a lot of this stuff, but I'm super stoked on it so I'd be happy to share ideas!
+Please feel free to email me at <yes@carib.codes> if you have any feedback or questions or would otherwise like to discuss any of the topics covered here. I'm brand new at a lot of this stuff, but I'm super stoked on it so I'd be happy to share ideas and resources!
 
 Have fun!
