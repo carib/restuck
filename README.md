@@ -3,7 +3,8 @@
 
 ### What is _Stuck!_?
 
-Good question! Originally (and ultimately), _Stuck!_ is a minimalist [roguelike RPG](https://en.wikipedia.org/wiki/Roguelike). That's the goal, anyway. For now it's a an active pathfinding visualizer with procedurally generated maps:
+Good question! Originally (and ultimately), _Stuck!_ is a minimalist [roguelike RPG](https://en.wikipedia.org/wiki/Roguelike).
+That's the goal, anyway. For now it's a an active pathfinding visualizer with procedurally generated maps:
 
 ![_Stuck!_ Pathfinding Visualizer](/assets_readme/stuck_readme_still.png)
 
