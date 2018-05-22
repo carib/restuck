@@ -63,7 +63,7 @@ I'm still not completely satisfied with the response part of this. In some cases
 I've been reading up a lot on 2D physics and math for games and I plan on experimenting with different concepts and implementations. One example I saw creates individual class instances for each point, vector, sweep/test, and reflection. It looks really interesting, but I'll need to refactor my classes first to get the most out of it.
 
 # The Future!
-This is far and away my favorite project to work on at the moment. I mean, I love love CSS3 and exploring all the new tricks and fun stuff there, but anyone who knows me knows that my first love is learning new stuff. It's why I survived all the absurd pitfalls littered throughout my youth, and it's what made me a good tech writer.
+This is far and away my favorite project to work on at the moment. I mean, I love love CSS3 and exploring all the new tricks and fun stuff there, but anyone who knows me knows that my first love is learning new stuff.
 
 Just in terms of exploring new concepts and opportunities for creative problem solving, building this game has been the most rewarding experience I've had in years.
 
