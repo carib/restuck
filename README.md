@@ -30,7 +30,7 @@ Now, `<canvas>` firmly in place, I dug in to some 2D vector math and applied all
 
 ### Pathfinding
 
-This was a ton of fun to work on! As I said at the top, it's an A* algorithm using a binary heap priority queue to store and sort the nodes. My early attempts were pretty funny, here's a personal favorite:
+This was a ton of fun to work on! As I said at the top, it's an A* algorithm using a binary heap priority queue to store and sort the grid cells. My early attempts were pretty funny, here's a personal favorite:
 
 ![Found it!](/assets_readme/v2_early_pathfinding-53.png)
 
@@ -41,7 +41,7 @@ Turns out my algorithm was overestimating the heuristic ([Manhattan Distance](ht
 And when I added the binary heap data structure it got way way faster.
 
 #### Planned
-So, I know that this algorithm isn't returning the absolute most-efficient path from A to B. I mean, look at the second image above. Clearly, there are some wasted steps in there and it's crutching pretty heavily on the walls.
+So, I know that this algorithm isn't returning the absolute most-efficient path from P to Q. I mean, look at the second image above. Clearly, there are some wasted steps in there and it's crutching pretty heavily on the walls.
 
 Cleaning that path up is first thing on my task list. To start, I'll be testing a few optimizations I've read about. For example, [Jump Point Search](https://en.wikipedia.org/wiki/Jump_point_search) looks very promising for my needs since I don't have variable terrain costs weighing down movement.
 
@@ -49,10 +49,14 @@ I'd also like to experiment with different map representations. And once I can w
 
 Finally, the simplest and most practical optimization I can think of is to just refactor! I hacked a few things together building this, for sure. ASAP, I plan on consolidating a few classes that are effectively redundant like the [Node](https://github.com/carib/stuck/blob/master/site/js/entities/map_grid/heap.js) and  [Cell](https://github.com/carib/stuck/blob/master/site/js/entities/map_grid/cell.js). I may also rebuild [Stage](https://github.com/carib/stuck/blob/master/site/js/entities/stage.js) and [Pathfinder](https://github.com/carib/stuck/blob/master/site/js/entities/map_grid/pathfinder.js) to be subclasses of [Grid](https://github.com/carib/stuck/blob/master/site/js/entities/map_grid/grid.js) since they've both ended up using a lot of the Grid methods.
 
+Also, since the shortest path (especially at a healthy distance) is not really P -> Q, but more like P -> Q -> R, it's super wasteful to toss out the whole path each time the route is calculated. Instead, I plan on storing P -> Q and only recalculating Q -> R until either the target or seeker passes some threshold distance from their initial xy.
+
+Meanwhile, the seeker will be able to follow the P -> Q route since it won't have to keep reseting its directions anymore. That'll be super helpful. As is, the seekers are pretty stupid. Every time a path is found they immediately run into the nearest wall!
+
 ### Collision Detection & Response
 
 #### Detection
-This is a super straight forward [Axis-Aligned Bounding Boxes](https://en.wikipedia.org/wiki/Bounding_volume) (AABB) system. Since all the colliders are square, they're essentially their own bounding boxes. For the broad-phase detection, each moving collider maintains four map objects representing the each of the four possible grid cells they may occupy.
+This is a super straight forward [Axis-Aligned Bounding Boxes](https://en.wikipedia.org/wiki/Bounding_volume) (AABB) system. Since all the colliders are square, they're essentially their own bounding boxes. For the broad-phase detection, each moving collider maintains four map objects representing each of the four possible grid cells they may occupy.
 
 #### Response
 If one of these maps is found to contain more than one object (other than itself), a narrow-phase check for intersections is triggered. If any intersection is present, the collider is reset to its last known xy position and its velocity is dropped to zero.
@@ -60,7 +64,7 @@ If one of these maps is found to contain more than one object (other than itself
 #### Planned
 I'm still not completely satisfied with the response part of this. In some cases the colliders will stick to the walls, and in rare instances the walls will actually swallow them up!
 
-I've been reading up a lot on 2D physics and math for games and I plan on experimenting with different concepts and implementations. One example I saw creates individual class instances for each point, vector, sweep/test, and reflection. It looks really interesting, but I'll need to refactor my classes first to get the most out of it.
+I've been reading up a lot on 2D physics and math for games and I plan on experimenting with different concepts and implementations. One example I saw creates individual class instances for each point, vector, sweep/test, and hit. It looks really interesting ([here's the tutorial](http://noonat.github.io/intersect/) if you'd like to learn more), but I'll need to refactor my classes first to get the most out of it.
 
 # The Future!
 This is far and away my favorite project to work on at the moment. I mean, I love love CSS3 and exploring all the new tricks and fun stuff there, but anyone who knows me knows that my first love is learning new stuff.
