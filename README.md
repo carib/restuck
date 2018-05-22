@@ -39,7 +39,7 @@ Turns out my algorithm was overestimating the heuristic ([Manhattan Distance](ht
 
 And when I added the binary heap data structure it got way way faster.
 
-##### Planned
+#### Planned
 So, I know that this algorithm isn't returning the absolute most-efficient path from A to B. I mean, look at the second image above. Clearly, there are some wasted steps in there and it's crutching pretty heavily on the walls.
 
 Cleaning that path up is first thing on my task list. To start, I'll be testing a few optimizations I've read about. For example, [Jump Point Search](https://en.wikipedia.org/wiki/Jump_point_search) looks very promising for my needs since I don't have variable terrain costs weighing down movement.
@@ -50,13 +50,13 @@ Finally, the simplest and most practical optimization I can think of is to just 
 
 ### Collision Detection & Response
 
-##### Detection
+#### Detection
 This is a super straight forward [Axis-Aligned Bounding Boxes](https://en.wikipedia.org/wiki/Bounding_volume) (AABB) system. Since all the colliders are square, they're essentially their own bounding boxes. For the broad-phase detection, each moving collider maintains four map objects representing the each of the four possible grid cells they may occupy.
 
-##### Response
+#### Response
 If one of these maps is found to contain more than one object (other than itself), a narrow-phase check for intersections is triggered. If any intersection is present, the collider is reset to its last known xy position and its velocity is dropped to zero.
 
-##### Planned
+#### Planned
 I'm still not completely satisfied with the response part of this. In some cases the colliders will stick to the walls, and in rare instances the walls will actually swallow them up!
 
 I've been reading up a lot on 2D physics and math for games and I plan on experimenting with different concepts and implementations. One example I saw creates individual class instances for each point, vector, sweep/test, and reflection. It looks really interesting, but I'll need to refactor my classes first to get the most out of it.
