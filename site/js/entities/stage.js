@@ -8,6 +8,7 @@ export default class Stage extends Grid {
     this.entities = new Set()
     this.numVoids = options.numVoids
     this.voidSize = options.voidSize
+    this.wallLog  = ''
 
     this.render           = this.render.bind(this)
     this.update           = this.update.bind(this)
@@ -29,8 +30,8 @@ export default class Stage extends Grid {
     ctx.fillRect(0, 0, width, height)
   }
 
-  init() {
-    this.generateTerrain()
+  init(seed) {
+    this.generateTerrain(seed)
     if (Opt.uiConfig.gridOverlay) {
       this.toggleGridOverlay()
     }
@@ -74,17 +75,27 @@ export default class Stage extends Grid {
     cell = this.get(coords)
     cell.add(wall)
     cell.isWall = true
+    this.wallLog += `${coords}..`
     cell.setMCost()
   }
 
-  generateTerrain() {
+  generateTerrain(seed) {
     this.buildCellGrid()
     this.linkGridCells()
-    this.buildStageBorder()
-    const numVoids = this.numVoids
-    const voidSize = this.voidSize
-    for (let i = 0; i < numVoids; i++) {
-      this.growVoid(voidSize, voidSize)
+    if (!seed) {
+      this.buildStageBorder()
+      const numVoids = this.numVoids
+      const voidSize = this.voidSize
+      for (let i = 0; i < numVoids; i++) {
+        this.growVoid(voidSize, voidSize)
+      }
+    } else {
+      seed = seed.split('..')
+      seed.pop()
+      for (let i = 0; i < seed.length; i++) {
+        let coords = this.parseYX(seed[i])
+        this.placeWall(coords.x, coords.y)
+      }
     }
     this.cells.forEach(cell => cell.setMCost())
   }
@@ -146,6 +157,7 @@ export default class Stage extends Grid {
           }
         }, this)
       }
+      ent.grid = this.grid
     }, this)
   }
 

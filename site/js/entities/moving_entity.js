@@ -11,7 +11,23 @@ export default class MovingEntity extends Entity {
 
     this.update         = this.update.bind(this)
     this.updatePosition = this.updatePosition.bind(this)
+    this.handleKeyPress = this.handleKeyPress.bind(this)
+    this.keyResponse = this.keyResponse.bind(this)
   }
+
+
+    handleKeyPress(e) {
+      this.keyResponse(e)
+    }
+
+    keyResponse(e) {}
+
+
+    watchKeys() {
+      document.addEventListener('keyup', this.handleKeyPress)
+      document.addEventListener('keydown', this.handleKeyPress)
+    }
+
 
   update(timeStamp) {
     this.timeNow = timeStamp

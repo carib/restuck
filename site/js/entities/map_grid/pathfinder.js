@@ -21,11 +21,13 @@ export default class Pathfinder {
       },
       path: [],
     }
+    this.getGScore = this.getGScore.bind(this)
     this.initGrid = this.initGrid.bind(this)
     this.initPathfinder = this.initPathfinder.bind(this)
   }
 
   initGrid(grid) {
+    grid = grid ? grid : this.scene.stage
     const cells = new Map()
     this.grid   = grid
     this.goalXY = this.grid.parseYX(this.target.coords)
@@ -51,6 +53,7 @@ export default class Pathfinder {
   }
 
   rebuildPath() {
+    // debugger
     console.log(this);
     const path = []
     let cell = this.goal
@@ -85,14 +88,17 @@ export default class Pathfinder {
           this.rebuildPath()
           return
         }
+        if (!current.g) {
+          this.getGScore(current)
+        }
         for (let link of current.linked) {
           cost = current.g + this.findMCost(current, link)
           this.log.sorts.cost[current.coords] = cost
-          if (link.isOpen && cost < this.getGScore(link)) {
-            link.isOpen = false
-            this.log.sorts.nixed[link.coords] = link
-            continue
-          }
+          // if (link.isOpen && cost < this.getGScore(link)) {
+          //   link.isOpen = false
+          //   this.log.sorts.nixed[link.coords] = link
+          //   continue
+          // }
           if (link.isClosed && cost > this.getGScore(link)) {
             this.openNode(link.coords)
             link.parent = current
@@ -151,6 +157,8 @@ export default class Pathfinder {
         if (typeof link === 'string') {
           linkNode = this.cells.get(link)
           if (linkNode && !linkNode.visited && !linkNode.isWall) {
+            // debugger
+            this.getGScore(linkNode)
             linkNodes.push(linkNode)
           }
         }
@@ -166,10 +174,15 @@ export default class Pathfinder {
   }
 
   getGScore(cell) {
-    if (cell.parent === null) {
+    if (cell.isStart) {
       return 0
     }
-    return cell.g + cell.parent.g + cell.m
+    if (cell.parent) {
+      cell.g += cell.parent.g + cell.m
+    } else {
+      cell.g += cell.m
+    }
+    return cell.g
   }
 
   getHScore(x, y) {

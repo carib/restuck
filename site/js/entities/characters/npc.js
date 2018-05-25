@@ -36,6 +36,7 @@ export default class NonPlayerCharacter extends MovingEntity {
 
   findTarget(target) {
     target = target ? target : this.target.getDetails()
+    this.grid = this.scene.stage
     this.pathFound = false
     this.pathfinder = new Pathfinder()
     this.pathfinder.scene = this.scene
