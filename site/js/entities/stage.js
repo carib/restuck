@@ -23,7 +23,10 @@ export default class Stage {
   }
 
   render() {
-
+    let { ctx } = this.scene
+    let { width, height } = this
+    ctx.fillStyle = '#fff'
+    ctx.fillRect(0, 0, width, height)
   }
 
   init() {

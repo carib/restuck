@@ -13,16 +13,18 @@ export let uiConfig = {
 
 export let stage = {
   numVoids: 100,
-  voidSize: 3,
-  height: 320,
-  width: 480
+  voidSize: 10,
+  height: 480,
+  width: 720
 }
 
 export let wall = {
   coords: null,
   x: 0,
   y: 0,
-  color: '#000'
+  color: '#161c20'
+  // color: 'rgb(255, 255, 255, 0)'
+  // color: '#000'
 }
 
 // Decrease moving entity cellSize for clearance

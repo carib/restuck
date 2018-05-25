@@ -506,16 +506,19 @@ var uiConfig = exports.uiConfig = {
 
 var stage = exports.stage = {
   numVoids: 100,
-  voidSize: 3,
-  height: 320,
-  width: 480
+  voidSize: 10,
+  height: 480,
+  width: 720
 };
 
 var wall = exports.wall = {
   coords: null,
   x: 0,
   y: 0,
-  color: '#000'
+  color: '#161c20'
+  // color: 'rgb(255, 255, 255, 0)'
+  // color: '#000'
+
 
   // Decrease moving entity cellSize for clearance
 
@@ -2560,7 +2563,14 @@ var Stage = function () {
     }
   }, {
     key: 'render',
-    value: function render() {}
+    value: function render() {
+      var ctx = this.scene.ctx;
+      var width = this.width,
+          height = this.height;
+
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, width, height);
+    }
   }, {
     key: 'init',
     value: function init() {

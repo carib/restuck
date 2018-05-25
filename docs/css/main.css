@@ -18,7 +18,6 @@ body {
 canvas {
   position: fixed;
   box-sizing: border-box;
-  background-color: #fff;
   top: 10%;
   left: 175px; }
 
