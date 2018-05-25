@@ -17,7 +17,7 @@ export default class PathMark {
   update() {
     setTimeout(() => {
       this.scene.remove(this)
-    }, 1000)
+    }, 5000)
   }
 
   render() {

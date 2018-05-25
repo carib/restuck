@@ -15,7 +15,7 @@ export default class MovingEntity extends Entity {
 
   update(timeStamp) {
     this.timeNow = timeStamp
-    this.grid = this.scene.stage.grid
+    this.grid = this.scene.stage
     if (!this.isStuck) {
       this.updatePosition()
       this.coords = this.grid.getCellAt(Math.floor(this.y), Math.floor(this.x))

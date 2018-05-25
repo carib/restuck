@@ -51,6 +51,7 @@ export default class Pathfinder {
   }
 
   rebuildPath() {
+    console.log(this);
     const path = []
     let cell = this.goal
     while (cell !== this.start) {
@@ -64,7 +65,7 @@ export default class Pathfinder {
     this.pathFound = true
 
     this.log.path = path
-    // console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
+    console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
   }
 
   findPath() {
@@ -124,6 +125,13 @@ export default class Pathfinder {
     return cell
   }
 
+  closeNode(node) {
+    let cell      = this.cells.get(node.cell)
+    cell.isOpen   = false
+    cell.isClosed = true
+    this.closed.set(node.cell, node)
+  }
+
   getNext() {
     let node = this.open.remove()
     let linkNodes
@@ -131,7 +139,7 @@ export default class Pathfinder {
     if (node) {
       let cell = this.cells.get(node.cell)
       linkNodes = []
-      if (cell.isWall || !cell.isOpen || cell.isClosed) {
+      if (!cell.isOpen || cell.isClosed) {
         this.getNext()
       }
       this.closeNode(node)
@@ -155,13 +163,6 @@ export default class Pathfinder {
         this.checkNullPath()
       }
     }
-  }
-
-  closeNode(node) {
-    let cell      = this.cells.get(node.cell)
-    cell.isOpen   = false
-    cell.isClosed = true
-    this.closed.set(node.cell, node)
   }
 
   getGScore(cell) {

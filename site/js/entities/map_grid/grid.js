@@ -1,9 +1,14 @@
+import { Cell } from '../'
+
+import * as Opt from '../../components/options'
 
 export default class Grid {
   constructor(options) {
     this.rows     = options.numRows
     this.cols     = options.numCols
     this.cellSize = options.cellSize
+    this.height   = Opt.stage.height
+    this.width    = Opt.stage.width
     this.first    = null
     this.last     = null
     this.cells    = new Map()
@@ -60,11 +65,6 @@ export default class Grid {
     this.cells.delete(cell.coords)
   }
 
-  replace(cell) {
-    this.remove(cell)
-    this.add(cell)
-  }
-
   get(cell) {
     if (typeof cell === 'string') {
       return this.cells.get(cell)
@@ -73,6 +73,26 @@ export default class Grid {
       debugger
     }
     return this.cells.get(cell.coords)
+  }
+
+  buildCellGrid() {
+    this.numRows  = Math.floor(this.height / Opt.cellSize)
+    this.numCols  = Math.floor(this.width / Opt.cellSize)
+    this.numCells = this.numRows * this.numCols;
+    const gridOpt = {
+      numRows: this.numRows,
+      numCols: this.numCols,
+      cellSize: Opt.cellSize
+    }
+    for (let i = 0; i < this.numCells; i++) {
+      let col    = (i % 1000000 % this.numCols) * Opt.cellSize;
+      let row    = Math.floor(i / this.numCols) * Opt.cellSize;
+      let coords = `${row},${col}`
+      let cell   = new Cell(coords)
+      cell.grid = this
+      this.add(cell)
+    }
+    return this;
   }
 
   isFirstCell(cell) {
@@ -126,6 +146,28 @@ export default class Grid {
     if (this.get(cell)) {
       return cell
     }
+  }
+
+  getRandomCell() {
+    const mockEnt = {}
+    let randomCell;
+    let col = Math.floor(Math.random() * this.numCols)
+    let row = Math.floor(Math.random() * this.numRows)
+    col = (col > this.numCols) ? this.numCols - 2 : col
+    col = (col < 0) ? 20 : col
+    row = (row > this.numRows) ? this.numRows : row
+    row = (row < 0) ? 20 : row
+    mockEnt.x  = col * Opt.cellSize
+    mockEnt.y  = row * Opt.cellSize
+    randomCell = this.getCellAt(mockEnt.y, mockEnt.x)
+    if (!randomCell) {
+      debugger
+      this.getCellAt(mockEnt.y, mockEnt.x)
+    }
+    if (this.get(randomCell).size() > 0) {
+      return this.getRandomCell()
+    }
+    return randomCell
   }
 
   setLinks(cell) {

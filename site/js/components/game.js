@@ -59,7 +59,7 @@ export default class Game {
   }
 
   createPlayer() {
-    const cell = this.stage.grid.parseYX(this.stage.getRandomCell())
+    const cell = this.stage.parseYX(this.stage.getRandomCell())
     Opt.player.x = cell.x
     Opt.player.y = cell.y
     Opt.player.width  = Opt.cellSize > 2 ? Opt.cellSize - 2 : Opt.cellSize - 1
@@ -77,7 +77,7 @@ export default class Game {
     let cell
     let enemy
     for (let i = 0; i < numEnemies; i++) {
-      cell  = this.stage.grid.parseYX(this.stage.getRandomCell())
+      cell  = this.stage.parseYX(this.stage.getRandomCell())
       Opt.enemy.x = cell.x
       Opt.enemy.y = cell.y
       Opt.enemy.width  = Opt.cellSize > 2 ? Opt.cellSize - 2 : Opt.cellSize - 1
