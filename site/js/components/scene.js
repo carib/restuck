@@ -64,7 +64,6 @@ export default class Scene extends Canvas {
       if (entity.logType === 'enemy') {
         startX.innerText = `${Math.floor(entity.x)}`
         startY.innerText = `${Math.floor(entity.y)}`
-        
         if (entity.pathFound) {
           let elapsed = entity.pathfinder.log.elapsed
           pathFound.innerText = `${elapsed.toFixed(4)}ms`

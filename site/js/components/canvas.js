@@ -1,5 +1,3 @@
-
-
 export default class Canvas {
   constructor() {
     this.canvas = document.getElementById('canvas')

@@ -21,11 +21,13 @@ export default class Pathfinder {
       },
       path: [],
     }
+    this.getGScore = this.getGScore.bind(this)
     this.initGrid = this.initGrid.bind(this)
     this.initPathfinder = this.initPathfinder.bind(this)
   }
 
   initGrid(grid) {
+    grid = grid ? grid : this.scene.stage
     const cells = new Map()
     this.grid   = grid
     this.goalXY = this.grid.parseYX(this.target.coords)
@@ -51,6 +53,8 @@ export default class Pathfinder {
   }
 
   rebuildPath() {
+    // debugger
+    console.log(this);
     const path = []
     let cell = this.goal
     while (cell !== this.start) {
@@ -64,7 +68,7 @@ export default class Pathfinder {
     this.pathFound = true
 
     this.log.path = path
-    // console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
+    console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
   }
 
   findPath() {
@@ -83,6 +87,9 @@ export default class Pathfinder {
 
           this.rebuildPath()
           return
+        }
+        if (!current.g) {
+          this.getGScore(current)
         }
         for (let link of current.linked) {
           cost = current.g + this.findMCost(current, link)
@@ -124,6 +131,13 @@ export default class Pathfinder {
     return cell
   }
 
+  closeNode(node) {
+    let cell      = this.cells.get(node.cell)
+    cell.isOpen   = false
+    cell.isClosed = true
+    this.closed.set(node.cell, node)
+  }
+
   getNext() {
     let node = this.open.remove()
     let linkNodes
@@ -131,7 +145,7 @@ export default class Pathfinder {
     if (node) {
       let cell = this.cells.get(node.cell)
       linkNodes = []
-      if (cell.isWall || !cell.isOpen || cell.isClosed) {
+      if (!cell.isOpen || cell.isClosed) {
         this.getNext()
       }
       this.closeNode(node)
@@ -143,6 +157,8 @@ export default class Pathfinder {
         if (typeof link === 'string') {
           linkNode = this.cells.get(link)
           if (linkNode && !linkNode.visited && !linkNode.isWall) {
+            // debugger
+            this.getGScore(linkNode)
             linkNodes.push(linkNode)
           }
         }
@@ -157,18 +173,16 @@ export default class Pathfinder {
     }
   }
 
-  closeNode(node) {
-    let cell      = this.cells.get(node.cell)
-    cell.isOpen   = false
-    cell.isClosed = true
-    this.closed.set(node.cell, node)
-  }
-
   getGScore(cell) {
-    if (cell.parent === null) {
+    if (cell.isStart) {
       return 0
     }
-    return cell.g + cell.parent.g + cell.m
+    if (cell.parent) {
+      cell.g += cell.parent.g + cell.m
+    } else {
+      cell.g += cell.m
+    }
+    return cell.g
   }
 
   getHScore(x, y) {

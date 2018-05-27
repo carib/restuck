@@ -7,7 +7,8 @@ export default class Cell {
     this.isLast  = false
     this.links   = new Set()
     this.cell    = new Set()
-    this.mCost   = 1
+    this.mCost   = 0
+    this.isWall  = false
     this.y       = null
     this.x       = null
     this.logType = 'cell'
@@ -18,6 +19,23 @@ export default class Cell {
     this.each   = this.each.bind(this)
     this.clear  = this.clear.bind(this)
     this.remove = this.remove.bind(this)
+  }
+
+  setMCost() {
+    if (this.isWall) {
+      this.mCost = 10
+      return
+    }
+    this.links.forEach(link => {
+      let cell = this.grid.get(link)
+      if (cell.mCost > 0) {
+        this.mCost = Math.floor(cell.mCost - 3)
+      }
+      if (this.mCost < 0) {
+        this.mCost = 0
+      }
+      // debugger
+    })
   }
 
   size() {
