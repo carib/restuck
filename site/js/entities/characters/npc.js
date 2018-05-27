@@ -95,6 +95,7 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   follow() {
+    const dirs = ['NORTH', 'SOUTH', 'EAST', 'WEST']
     let dir = this.pathMoves.shift()
     if (!this.lookAheadForWall(dir)) {
       this.direction = dir
@@ -102,6 +103,13 @@ export default class NonPlayerCharacter extends MovingEntity {
       if (this.backTrace.length > 10) {
         this.backTrace.pop()
       }
+    } else {
+      dirs.forEach(d => {
+        if (!this.lookAheadForWall(d)) {
+          this.pathMoves.unshift(d)
+          return;
+        }
+      }, this)
     }
   }
 
@@ -169,7 +177,6 @@ export default class NonPlayerCharacter extends MovingEntity {
         nextCell = this.grid.getCellAt(this.y + this.speed, this.x)
         return this.grid.get(nextCell).isWall ? true : false
     }
-
   }
 
   checkLogs() {
