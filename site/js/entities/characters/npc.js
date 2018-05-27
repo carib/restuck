@@ -19,11 +19,8 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   keyResponse(e) {
-    console.log('keyResponse');
     let keydown = (e.type === 'keydown') ? true : false
     this.activeKey = e.keyCode
-    console.log(this.pathMoves);
-    console.log(e.type);
     if (keydown) {
       this.navigatePath()
     } else {
@@ -38,13 +35,11 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   findTarget(target) {
-    console.log('findTarget');
     target = target ? target : this.target.getDetails()
     this.path = []
     this.pathMoves = []
     this.grid = this.scene.stage
     this.pathFound = false
-    this.scene.remove(this.pathfinder)
     this.pathfinder = new Pathfinder()
     this.pathfinder.scene = this.scene
     this.pathfinder.initPathfinder(this.grid, this, target)
@@ -59,7 +54,6 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   navigatePath() {
-    console.log('navigatePath');
     if (!this.pathFound) {
       this.findTarget()
       this.pathFound = true
@@ -81,45 +75,37 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   resetPosition() {
-    console.log('resetPosition');
     this.veloX = 0
     this.veloY = 0
     this.retrace(this.backTrace)
-    // if (this.direction === this.collisionDirection) {
     switch (this.collisionDirection) {
       case 'WEST':
-        this.x = this.lastX + 0.1
+        this.x = this.lastX + 0.3
         break;
       case 'NORTH':
-        this.y = this.lastY + 0.1
+        this.y = this.lastY + 0.3
         break;
       case 'EAST':
-        this.x = this.lastX - 0.1
+        this.x = this.lastX - 0.3
         break;
       case 'SOUTH':
-        this.y = this.lastY - 0.1
+        this.y = this.lastY - 0.3
         break;
     }
-    // }
   }
 
   follow() {
-    console.log('follow');
     let dir = this.pathMoves.shift()
-    console.log('backtrace',this.backTrace);
     if (!this.lookAheadForWall(dir)) {
       this.direction = dir
-    } else {
-      this.follow()
-    }
-    this.backTrace.unshift(dir)
-    if (this.backTrace.length > 10) {
-      this.backTrace.pop()
+      this.backTrace.unshift(dir)
+      if (this.backTrace.length > 10) {
+        this.backTrace.pop()
+      }
     }
   }
 
   retrace(backTrace) {
-    console.log('retrace');
     let dir
     this.pathMoves = []
     for (let i = 0; i < 3; i++) {
@@ -130,7 +116,6 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   translatePath(backTrace) {
-    console.log('translatePath');
     let moves = []
     let nextMove, lastMove, dx, dy
 
@@ -165,19 +150,10 @@ export default class NonPlayerCharacter extends MovingEntity {
         }
       }
     }
-    // if (this.pathMoves.length > 10) {
-    //   let pMoves = this.pathMoves.slice(0, 10)
-    //   moves = moves.slice(10, moves.length)
-    //   for (let i = 0; i < moves.length; i++) {
-    //     pMoves.push(moves[i])
-    //   }
-    //   moves = pMoves
-    // }
     this.pathMoves = moves
   }
 
   lookAheadForWall(nextMove) {
-    console.log('lookAheadForWall');
     let nextCell
     switch (nextMove) {
       case 'WEST':
@@ -197,7 +173,6 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   checkLogs() {
-    console.log('checkLogs');
     const logs = Object.values(this.pathfinder.log.sorts)
     const activeLogs = []
     logs.forEach(log => {
@@ -207,7 +182,6 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   getLost() {
-    console.log('getLost');
     const logs = this.checkLogs()
     let randomCoords
     let cell
