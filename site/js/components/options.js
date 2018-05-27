@@ -43,8 +43,8 @@ export let enemy = {
   coords: null,
   x: 0,
   y: 0,
-  speed: 0.3,
-  friction: 0.9,
+  speed: 0.2,
+  friction: 0.5,
   color: '#ff6347',
   logType: 'enemy',
 }

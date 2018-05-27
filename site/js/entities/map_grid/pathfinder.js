@@ -44,6 +44,7 @@ export default class Pathfinder {
 
   initPathfinder(grid, entity, target) {
     this.open.clear()
+    this.grid = null
     this.target = target
     this.entity = entity
     this.cost   = 0

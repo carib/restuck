@@ -89,7 +89,7 @@ export default class Grid {
       let row    = Math.floor(i / this.numCols) * Opt.cellSize;
       let coords = `${row},${col}`
       let cell   = new Cell(coords)
-      cell.grid = this
+      cell.grid  = this
       this.add(cell)
     }
     return this;

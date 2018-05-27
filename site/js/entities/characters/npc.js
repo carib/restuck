@@ -9,7 +9,8 @@ export default class NonPlayerCharacter extends MovingEntity {
     this.targetXY   = null
     this.pathFound  = false
     this.path       = []
-    this.backTrace   = []
+    this.pathMoves  = []
+    this.backTrace  = []
     this.listenting = false
 
     this.navigatePath = this.navigatePath.bind(this)
@@ -18,15 +19,17 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   keyResponse(e) {
+    console.log('keyResponse');
     let keydown = (e.type === 'keydown') ? true : false
     this.activeKey = e.keyCode
+    console.log(this.pathMoves);
+    console.log(e.type);
     if (keydown) {
       this.navigatePath()
     } else {
       this.activeKey = null
       if (this.activeKey === 37 || this.activeKey === 39) {
         this.veloX -= this.speed / 3
-
       }
       if (this.activeKey === 38 || this.activeKey === 40) {
         this.veloY -= this.speed / 3
@@ -35,9 +38,13 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   findTarget(target) {
+    console.log('findTarget');
     target = target ? target : this.target.getDetails()
+    this.path = []
+    this.pathMoves = []
     this.grid = this.scene.stage
     this.pathFound = false
+    this.scene.remove(this.pathfinder)
     this.pathfinder = new Pathfinder()
     this.pathfinder.scene = this.scene
     this.pathfinder.initPathfinder(this.grid, this, target)
@@ -51,7 +58,146 @@ export default class NonPlayerCharacter extends MovingEntity {
     }
   }
 
+  navigatePath() {
+    console.log('navigatePath');
+    if (!this.pathFound) {
+      this.findTarget()
+      this.pathFound = true
+      this.translatePath()
+    }
+    if (this.activeKey && this.path.length) {
+      this.follow()
+      this.updatePosition()
+    }
+    if (this.path && this.path.length <= 1) {
+      this.pathFound = false
+    }
+    if (!this.pathMoves.length) {
+      this.pathFound = false
+    }
+    if (this.pathMoves.some(el => !el)) {
+      this.pathFound = false
+    }
+  }
+
+  resetPosition() {
+    console.log('resetPosition');
+    this.veloX = 0
+    this.veloY = 0
+    this.retrace(this.backTrace)
+    // if (this.direction === this.collisionDirection) {
+    switch (this.collisionDirection) {
+      case 'WEST':
+        this.x = this.lastX + 0.1
+        break;
+      case 'NORTH':
+        this.y = this.lastY + 0.1
+        break;
+      case 'EAST':
+        this.x = this.lastX - 0.1
+        break;
+      case 'SOUTH':
+        this.y = this.lastY - 0.1
+        break;
+    }
+    // }
+  }
+
+  follow() {
+    console.log('follow');
+    let dir = this.pathMoves.shift()
+    console.log('backtrace',this.backTrace);
+    if (!this.lookAheadForWall(dir)) {
+      this.direction = dir
+    } else {
+      this.follow()
+    }
+    this.backTrace.unshift(dir)
+    if (this.backTrace.length > 10) {
+      this.backTrace.pop()
+    }
+  }
+
+  retrace(backTrace) {
+    console.log('retrace');
+    let dir
+    this.pathMoves = []
+    for (let i = 0; i < 3; i++) {
+      dir = backTrace.shift()
+      this.pathMoves.unshift(dir)
+    }
+    this.direction = this.pathMoves[0]
+  }
+
+  translatePath(backTrace) {
+    console.log('translatePath');
+    let moves = []
+    let nextMove, lastMove, dx, dy
+
+    for (let i = 0; i < this.path.length; i++) {
+      lastMove = lastMove ? lastMove : this
+      nextMove = this.path[i]
+      dx = nextMove.x - lastMove.x
+      dy = nextMove.y - lastMove.y
+      lastMove = nextMove
+      if (dx > 0) {
+        for (let i = 0; i < 6; i++) {
+          moves.push('EAST')
+          continue
+        }
+      }
+      if (dx < 0) {
+        for (let i = 0; i < 6; i++) {
+          moves.push('WEST')
+          continue
+        }
+      }
+      if (dy > 0) {
+        for (let i = 0; i < 6; i++) {
+          moves.push('SOUTH')
+          continue
+        }
+      }
+      if (dy < 0) {
+        for (let i = 0; i < 6; i++) {
+          moves.push('NORTH')
+          continue
+        }
+      }
+    }
+    // if (this.pathMoves.length > 10) {
+    //   let pMoves = this.pathMoves.slice(0, 10)
+    //   moves = moves.slice(10, moves.length)
+    //   for (let i = 0; i < moves.length; i++) {
+    //     pMoves.push(moves[i])
+    //   }
+    //   moves = pMoves
+    // }
+    this.pathMoves = moves
+  }
+
+  lookAheadForWall(nextMove) {
+    console.log('lookAheadForWall');
+    let nextCell
+    switch (nextMove) {
+      case 'WEST':
+        nextCell = this.grid.getCellAt(this.y, this.x - this.speed)
+        return this.grid.get(nextCell).isWall ? true : false
+      case 'NORTH':
+        nextCell = this.grid.getCellAt(this.y - this.speed, this.x)
+        return this.grid.get(nextCell).isWall ? true : false
+      case 'EAST':
+        nextCell = this.grid.getCellAt(this.y, this.x + this.speed)
+        return this.grid.get(nextCell).isWall ? true : false
+      case 'SOUTH':
+        nextCell = this.grid.getCellAt(this.y + this.speed, this.x)
+        return this.grid.get(nextCell).isWall ? true : false
+    }
+
+  }
+
   checkLogs() {
+    console.log('checkLogs');
     const logs = Object.values(this.pathfinder.log.sorts)
     const activeLogs = []
     logs.forEach(log => {
@@ -61,6 +207,7 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   getLost() {
+    console.log('getLost');
     const logs = this.checkLogs()
     let randomCoords
     let cell
@@ -77,115 +224,6 @@ export default class NonPlayerCharacter extends MovingEntity {
         }
       } else {
         this.getLost()
-      }
-    }
-  }
-
-  navigatePath() {
-    if (this.path && this.path.length <= 1) {
-      this.pathFound = false
-    }
-    if (!this.pathFound) {
-      this.findTarget()
-      this.pathFound = true
-    }
-    if (this.activeKey && this.path.length) {
-      this.translatePath()
-      this.updatePosition()
-      this.backTrace = []
-    }
-  }
-
-  resetPosition() {
-    this.veloX = 0
-    this.veloY = 0
-    this.translatePath(this.backTrace)
-    if (this.direction === this.collisionDirection) {
-      switch (this.direction) {
-        case 'WEST':
-          this.x = this.lastX + 0.001
-          break;
-        case 'NORTH':
-          this.y = this.lastY + 0.001
-          break;
-        case 'EAST':
-          this.x = this.lastX - 0.001
-          break;
-        case 'SOUTH':
-          this.y = this.lastY - 0.001
-          break;
-      }
-    }
-  }
-
-  follow(path) {
-    let dx = this.target.x - this.x,
-        dy = this.target.y - this.y,
-        lastX = this.x,
-        lastY = this.y,
-        absDX = Math.abs(dx),
-        absDY = Math.abs(dy)
-    for (let i = 0; i < (path.length / 3); i++) {
-      this.backTrace.unshift(path.shift())
-      let { x, y } = this.backTrace[0]
-      dx += Math.floor(x - lastX)
-      dy += Math.floor(y - lastY)
-      lastX = x
-      lastY = y
-    }
-    return {
-      absDX: absDX, absDY: absDY,
-      dx: dx, dy: dy
-    }
-  }
-
-  retrace(path) {
-    path = path.slice(0)
-    let targetXY = path.slice(path.length - 1)
-    let dx = targetXY.x - this.x,
-        dy = targetXY.y - this.y,
-        lastX = this.x,
-        lastY = this.y,
-        absDX = Math.abs(dx),
-        absDY = Math.abs(dy)
-    this.backTrace = []
-    for (let i = 0; i < (path.length / 3); i++) {
-      this.backTrace.unshift(path.shift())
-      let { x, y } = this.backTrace[0]
-      dx += Math.floor(x - lastX)
-      dy += Math.floor(y - lastY)
-      lastX = x
-      lastY = y
-    }
-    return {
-      absDX: absDX, absDY: absDY,
-      dx: dx, dy: dy
-    }
-  }
-
-  translatePath(path) {
-    let pathDeltas = path ? this.retrace(path) : this.follow(this.path),
-        { absDX, absDY, dx, dy } = pathDeltas
-    if (absDX > absDY) {
-      this.veloX = 0
-      if (dx > 0) {
-        this.direction = 'EAST'
-        return
-      }
-      if (dx < 0) {
-        this.direction = 'WEST'
-        return
-      }
-    }
-    if (absDX < absDY) {
-      this.veloY = 0
-      if (dy > 0) {
-        this.direction = 'SOUTH'
-        return
-      }
-      if (dy < 0) {
-        this.direction = 'NORTH'
-        return
       }
     }
   }
