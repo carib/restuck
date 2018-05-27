@@ -2074,7 +2074,7 @@ var PathMark = function () {
 
       setTimeout(function () {
         _this.scene.remove(_this);
-      }, 5000);
+      }, 1000);
     }
   }, {
     key: 'render',
