@@ -9,7 +9,7 @@ export default class NonPlayerCharacter extends MovingEntity {
     this.targetXY   = null
     this.pathFound  = false
     this.path       = []
-    this.lastPath   = []
+    this.backTrace   = []
     this.listenting = false
 
     this.navigatePath = this.navigatePath.bind(this)
@@ -92,14 +92,14 @@ export default class NonPlayerCharacter extends MovingEntity {
     if (this.activeKey && this.path.length) {
       this.translatePath()
       this.updatePosition()
-      this.lastPath = []
+      this.backTrace = []
     }
   }
 
   resetPosition() {
     this.veloX = 0
     this.veloY = 0
-    this.translatePath(this.lastPath)
+    this.translatePath(this.backTrace)
     if (this.direction === this.collisionDirection) {
       switch (this.direction) {
         case 'WEST':
@@ -126,8 +126,8 @@ export default class NonPlayerCharacter extends MovingEntity {
         absDX = Math.abs(dx),
         absDY = Math.abs(dy)
     for (let i = 0; i < (path.length / 3); i++) {
-      this.lastPath.unshift(path.shift())
-      let { x, y } = this.lastPath[0]
+      this.backTrace.unshift(path.shift())
+      let { x, y } = this.backTrace[0]
       dx += Math.floor(x - lastX)
       dy += Math.floor(y - lastY)
       lastX = x
@@ -148,10 +148,10 @@ export default class NonPlayerCharacter extends MovingEntity {
         lastY = this.y,
         absDX = Math.abs(dx),
         absDY = Math.abs(dy)
-    this.lastPath = []
+    this.backTrace = []
     for (let i = 0; i < (path.length / 3); i++) {
-      this.lastPath.unshift(path.shift())
-      let { x, y } = this.lastPath[0]
+      this.backTrace.unshift(path.shift())
+      let { x, y } = this.backTrace[0]
       dx += Math.floor(x - lastX)
       dy += Math.floor(y - lastY)
       lastX = x

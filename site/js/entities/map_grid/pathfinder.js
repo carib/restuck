@@ -94,11 +94,11 @@ export default class Pathfinder {
         for (let link of current.linked) {
           cost = current.g + this.findMCost(current, link)
           this.log.sorts.cost[current.coords] = cost
-          // if (link.isOpen && cost < this.getGScore(link)) {
-          //   link.isOpen = false
-          //   this.log.sorts.nixed[link.coords] = link
-          //   continue
-          // }
+          if (link.isOpen && cost < this.getGScore(link)) {
+            link.isOpen = false
+            this.log.sorts.nixed[link.coords] = link
+            continue
+          }
           if (link.isClosed && cost > this.getGScore(link)) {
             this.openNode(link.coords)
             link.parent = current
