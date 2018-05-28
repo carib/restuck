@@ -17,14 +17,12 @@ body {
 
 canvas {
   position: fixed;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   top: 10%;
   left: 175px; }
 
 #x-rule {
   position: fixed;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   top: 8%;
   left: 175px;
@@ -34,7 +32,6 @@ canvas {
 
 #y-rule {
   position: fixed;
-  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   top: 10%;
   left: 157px;
@@ -43,7 +40,8 @@ canvas {
   grid-template-rows: repeat(48, 10px); }
 
 #x-rule > .grid-num {
-  transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
   border: none; }
 
 #y-rule > .grid-num {
@@ -124,23 +122,17 @@ canvas {
   cursor: pointer; }
 
 .linkedin-link:hover {
-  transform: translateY(-5deg);
-  transition: transform 500ms ease; }
+  -webkit-transform: translateY(-5deg);
+          transform: translateY(-5deg);
+  transition: -webkit-transform 500ms ease;
+  transition: transform 500ms ease;
+  transition: transform 500ms ease, -webkit-transform 500ms ease; }
 
 [id$="-panel"] {
   position: fixed;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-pack: space-evenly;
-  -ms-flex-pack: space-evenly;
   justify-content: space-evenly;
-  -webkit-box-align: baseline;
-  -ms-flex-align: baseline;
   align-items: baseline;
   padding: 10px;
   background-color: #fff;
@@ -155,8 +147,6 @@ canvas {
   height: 120px;
   bottom: 30%;
   left: 2%;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
   justify-content: flex-start; }
 
 [class$="-checkbox-group"] {
@@ -168,8 +158,6 @@ canvas {
   display: grid;
   grid-template-columns: 50px 50px;
   grid-template-rows: 20px 20px;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   border-bottom: 1px solid black; }
 
