@@ -22,7 +22,6 @@ canvas {
   position: fixed;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  // background-color: #fff;
   top: 10%;
   left: 175px;
 }
@@ -33,7 +32,6 @@ canvas {
   position: fixed;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  // background-color: #fff;
   top: 8%;
   left: 175px;
   display: grid;
@@ -45,7 +43,6 @@ canvas {
   position: fixed;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  // background-color: #fff;
   top: 10%;
   left: 157px;
   display: grid;
@@ -59,7 +56,7 @@ canvas {
 }
 
 #y-rule > .grid-num {
-  border-bottom: 1px solid white;
+  border-top: 1px solid white;
 }
 
 .grid-num {

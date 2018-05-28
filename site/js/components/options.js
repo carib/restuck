@@ -23,8 +23,6 @@ export let wall = {
   x: 0,
   y: 0,
   color: '#161c20'
-  // color: 'rgb(255, 255, 255, 0)'
-  // color: '#000'
 }
 
 // Decrease moving entity cellSize for clearance

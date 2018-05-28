@@ -63,8 +63,8 @@ export default class MovingEntity extends Entity {
     this.lastX2 = this.x2
     this.lastY2 = this.y2
     this.move()
-    this.x     += this.veloX
-    this.y     += this.veloY
+    Math.floor(this.x     += this.veloX)
+    Math.floor(this.y     += this.veloY)
     this.veloX *= this.friction
     this.veloY *= this.friction
     this.x2     = this.x + this.width

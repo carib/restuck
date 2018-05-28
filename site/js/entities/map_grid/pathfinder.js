@@ -54,8 +54,7 @@ export default class Pathfinder {
   }
 
   rebuildPath() {
-    // debugger
-    console.log(this);
+    // console.log(this);
     const path = []
     let cell = this.goal
     while (cell !== this.start) {
@@ -69,7 +68,7 @@ export default class Pathfinder {
     this.pathFound = true
 
     this.log.path = path
-    console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
+    // console.log(`PATH FOUND IN ${this.log.elapsed} ms LOG: `, this.log);
   }
 
   findPath() {

@@ -6,7 +6,6 @@ export default class NonPlayerCharacter extends MovingEntity {
     super(options)
     this.grid       = null
     this.target     = null
-    this.targetXY   = null
     this.pathFound  = false
     this.path       = []
     this.pathMoves  = []
@@ -54,6 +53,7 @@ export default class NonPlayerCharacter extends MovingEntity {
   }
 
   navigatePath() {
+    let { x, y } = this.target
     if (!this.pathFound) {
       this.findTarget()
       this.pathFound = true
@@ -70,6 +70,9 @@ export default class NonPlayerCharacter extends MovingEntity {
       this.pathFound = false
     }
     if (this.pathMoves.some(el => !el)) {
+      this.pathFound = false
+    }
+    if (Math.abs(x - this.x) < 30 && Math.abs(y - this.y) < 30) {
       this.pathFound = false
     }
   }
@@ -121,6 +124,7 @@ export default class NonPlayerCharacter extends MovingEntity {
       this.pathMoves.unshift(dir)
     }
     this.direction = this.pathMoves[0]
+    return
   }
 
   translatePath(backTrace) {
@@ -134,25 +138,25 @@ export default class NonPlayerCharacter extends MovingEntity {
       dy = nextMove.y - lastMove.y
       lastMove = nextMove
       if (dx > 0) {
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 5; i++) {
           moves.push('EAST')
           continue
         }
       }
       if (dx < 0) {
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 5; i++) {
           moves.push('WEST')
           continue
         }
       }
       if (dy > 0) {
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 5; i++) {
           moves.push('SOUTH')
           continue
         }
       }
       if (dy < 0) {
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 5; i++) {
           moves.push('NORTH')
           continue
         }
